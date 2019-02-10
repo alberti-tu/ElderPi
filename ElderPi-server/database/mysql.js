@@ -1,18 +1,27 @@
 const mariadb = require('mariadb');
+const pool = mariadb.createPool({ user:'root', host: 'localhost', database: 'ElderPi'});
 
-const connect = function connect(database) {
-    mariadb.createConnection( { user:'root', host: 'localhost' } ).then(conn => {
-        console.log('Database connected! Id ' + conn.threadId);
-    }).catch(err => {
-        console.error('Mysql ' + err);
-    });
+const connectDatabase = async function connectDatabase() {
+    pool.getConnection()
+        .then(connection => {
+            console.log('Database connected');
+        })
+        .catch(err => {
+            let temp = mariadb.createPool({ user:'root', host: 'localhost' });
+            temp.query('CREATE DATABASE ElderPi');
+            temp.query('USE ElderPi');
+            temp.query('CREATE TABLE users (id TEXT NOT NULL, username TEXT NOT NULL, password TEXT NOT NULL)');
+            temp.query('USE ElderPi');
+            temp.query('CREATE TABLE sensors (name TEXT, ip_address TEXT NOT NULL, id TEXT NOT NULL, date DATETIME NULL );');
+            console.log('Database created');
+        });
 };
 
-const close = function close(database) {
-
+const querySQL = async function querySQL(sql, params = null) {
+    return pool.query(sql, params);
 };
 
 module.exports = {
-    connect: connect,
-    close: close
+    connectDatabase: connectDatabase,
+    querySQL: querySQL
 };
