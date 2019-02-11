@@ -3,10 +3,8 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
-const mysql = require('./database/mysql');
-
-// Connects the Database or creates one if it doesn't exists
-mysql.connect();
+const user = require('./routes/user');
+const sensor = require('./routes/sensor');
 
 let app = express();
 
@@ -16,14 +14,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Backend routes
+app.get('/register/:username/:password', user.register);
+app.get('/login/:username/:password', user.login);
 
-// Insert new User and return all database (TEST)
-app.get('/send/:id/:username/:password', function (req, res) {
-    mysql.querySQL('INSERT INTO users VALUES (?,?,?)', [req.params.id, req.params.username, req.params.password])
-        .then(result => {
-            mysql.querySQL('SELECT * FROM users').then(rows => res.send( rows ) );
-        });
-});
+app.get('/sensor/:deviceId', sensor.data);
 
 // Frontend routes
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];
