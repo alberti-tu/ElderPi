@@ -5,7 +5,7 @@ const logger = require('morgan');
 
 const mysql = require('./database/mysql');
 
-//Connects the Database or creates one if it doesn't exists
+// Connects the Database or creates one if it doesn't exists
 mysql.connect();
 
 let app = express();
@@ -25,7 +25,7 @@ app.get('/send/:id/:username/:password', function (req, res) {
         });
 });
 
-// Frontend
+// Frontend routes
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];
 app.get('*', (req, res) => {
     if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
