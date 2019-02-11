@@ -5,7 +5,8 @@ const logger = require('morgan');
 
 const mysql = require('./database/mysql');
 
-mysql.connectDatabase();
+//Connects the Database or creates one if it doesn't exists
+mysql.connect();
 
 let app = express();
 
@@ -16,21 +17,13 @@ app.use(cookieParser());
 
 // Backend routes
 
-//
-//'INSERT INTO users (name) VALUES ("' + req.params.name + '")'
-
 // Insert new User and return all database (TEST)
 app.get('/send/:id/:username/:password', function (req, res) {
     mysql.querySQL('INSERT INTO users VALUES (?,?,?)', [req.params.id, req.params.username, req.params.password])
-        .then(() => {
-            mysql.querySQL('SELECT * FROM users').then(rows => { res.send( rows ) });
-        })
-        .catch(error => {
-            console.error(error);
-            res.send(error);
+        .then(result => {
+            mysql.querySQL('SELECT * FROM users').then(rows => res.send( rows ) );
         });
 });
-
 
 // Frontend
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];
