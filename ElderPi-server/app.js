@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -8,6 +9,7 @@ const sensor = require('./routes/sensor');
 
 let app = express();
 
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -15,7 +17,7 @@ app.use(cookieParser());
 
 // Backend routes
 app.get('/register/:username/:password', user.register);
-app.get('/login/:username/:password', user.login);
+app.post('/login', user.login);
 
 app.get('/sensor/:deviceId', sensor.data);
 
