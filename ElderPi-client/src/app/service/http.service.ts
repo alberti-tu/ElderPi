@@ -7,12 +7,10 @@ import { User } from '../models/user';
 })
 export class HttpService {
 
-  private url: string = 'http://localhost:3000';
-
-  constructor( private http: HttpClient ) {}
+  constructor( private http: HttpClient ) { }
 
   public login(user: User) {
-    return this.http.post(this.url + '/login', user);
+    return this.http.post(location.origin + '/login', user);
   }
 }
 

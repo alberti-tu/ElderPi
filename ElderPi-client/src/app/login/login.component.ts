@@ -3,7 +3,6 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 
 import { HttpService } from '../service/http.service';
 import { User } from '../models/user';
-import {connectableObservableDescriptor} from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
   selector: 'app-login',
