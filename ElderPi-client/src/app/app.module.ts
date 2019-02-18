@@ -7,18 +7,22 @@ import { ToastrModule } from 'ng6-toastr-notifications';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { MainComponent } from './main/main.component';
+import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    MainComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot(),
+    AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent]
