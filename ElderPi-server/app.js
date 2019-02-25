@@ -3,6 +3,11 @@ const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+
+const options = { key: fs.readFileSync('certificate/server.key'), cert: fs.readFileSync('certificate/server.cert') };
 
 const user = require('./routes/user');
 const sensor = require('./routes/sensor');
@@ -14,6 +19,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Redirect the traffic HTTP to HTTPS
+app.use(function(req, res, next) {
+    if (req.secure) next();
+    else res.redirect('https://' + req.headers.host + req.url);
+});
 
 // Backend routes
 app.get('/register/:username/:password', user.register);
@@ -33,4 +44,10 @@ app.get('*', (req, res) => {
     }
 });
 
-module.exports = app;
+http.createServer(app).listen(80);
+https.createServer(options, app).listen(443);
+
+/*
+    To generate the certificate:
+        openssl req -nodes -new -x509 -keyout server.key -out server.cert
+ */
