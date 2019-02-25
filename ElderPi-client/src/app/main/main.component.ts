@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { HttpService } from '../service/http.service';
+import { Sensor } from '../models/sensor';
 
 @Component({
   selector: 'app-main',
@@ -7,8 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class MainComponent implements OnInit {
 
-  constructor() { }
+  headTable: string[] = ['Device ID', 'IP address', 'Hour', 'Date'];
+  bodyTable: Sensor[];
+
+  constructor(private http: HttpService) {
+    this.selectAll();
+  }
 
   ngOnInit() { }
+
+  selectAll() {
+    this.http.sensor().subscribe(result => { return this.bodyTable = result });
+  }
 
 }

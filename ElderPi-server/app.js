@@ -19,6 +19,7 @@ app.use(cookieParser());
 app.get('/register/:username/:password', user.register);
 app.post('/login', user.login);
 
+app.get('/sensor', sensor.selectAll);
 app.get('/sensor/:deviceId', sensor.data);
 
 // Frontend routes

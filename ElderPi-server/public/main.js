@@ -275,7 +275,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<p>\n  main works!\n</p>\n"
+module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.ip_address}}</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
 
 /***/ }),
 
@@ -291,19 +291,28 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainComponent", function() { return MainComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/http.service */ "./src/app/service/http.service.ts");
+
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent() {
+    function MainComponent(http) {
+        this.http = http;
+        this.headTable = ['Device ID', 'IP address', 'Hour', 'Date'];
+        this.selectAll();
     }
     MainComponent.prototype.ngOnInit = function () { };
+    MainComponent.prototype.selectAll = function () {
+        var _this = this;
+        this.http.sensor().subscribe(function (result) { return _this.bodyTable = result; });
+    };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-main',
             template: __webpack_require__(/*! ./main.component.html */ "./src/app/main/main.component.html"),
             styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/main/main.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"]])
     ], MainComponent);
     return MainComponent;
 }());
@@ -354,6 +363,9 @@ var HttpService = /** @class */ (function () {
     }
     HttpService.prototype.login = function (user) {
         return this.http.post(location.origin + '/login', user);
+    };
+    HttpService.prototype.sensor = function () {
+        return this.http.get(location.origin + '/sensor');
     };
     HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({

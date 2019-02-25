@@ -7,12 +7,19 @@ const data = async function data(req, res) {
         .then(rows => {
             if(rows.affectedRows !== 0) return res.send(rows);
             mysql.querySQL('INSERT INTO sensors VALUES (?,?,NOW())', [req.params.deviceId, ip_address])
-                .then(rows => res.send(rows) )
-                .catch(error => res.send(error.code) );
+                .then(rows => res.send(rows))
+                .catch(error => res.send(error.code));
         } )
         .catch(error => res.send(error.code) );
 };
 
+const selectAll = async function selectAll(req, res) {
+    mysql.querySQL('SELECT * FROM sensors')
+        .then(rows => res.send(rows))
+        .catch(error => res.send(error.code));
+};
+
 module.exports = {
+    selectAll: selectAll,
     data: data
 };
