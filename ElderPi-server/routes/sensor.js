@@ -3,6 +3,8 @@ const mysql = require('../database/mysql');
 // Update the sensor data or inserts a new one
 const data = async function data(req, res) {
     let ip_address = req.connection.remoteAddress.split('::ffff:')[1];  // sensor's IPv4 address
+    if(ip_address == null) ip_address = 'localhost';
+
     mysql.querySQL('UPDATE sensors SET ip_address = ?, timestamp = NOW() WHERE deviceID = ?', [ip_address, req.params.deviceId])
         .then(rows => {
             if(rows.affectedRows !== 0) return res.send(rows);

@@ -9,6 +9,9 @@ const fs = require('fs');
 
 const options = { key: fs.readFileSync('certificate/server.key'), cert: fs.readFileSync('certificate/server.cert') };
 
+const network = require('./network/network');
+network.interfaces('wlan0');
+
 const user = require('./routes/user');
 const sensor = require('./routes/sensor');
 
@@ -21,8 +24,10 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Redirect the traffic HTTP to HTTPS
+// Keep the traffic HTTP of the WSN
 app.use(function(req, res, next) {
-    if (req.secure) next();
+    let ip_remote = req.connection.remoteAddress.split('::ffff:')[1];  // sensor's IPv4 address
+    if (req.secure || network.isFromLan(ip_remote)) next();
     else res.redirect('https://' + req.headers.host + req.url);
 });
 
