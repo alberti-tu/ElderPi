@@ -275,7 +275,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.ip_address}}</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
+module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.ip_address}}</td>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
 
 /***/ }),
 
@@ -298,7 +298,7 @@ __webpack_require__.r(__webpack_exports__);
 var MainComponent = /** @class */ (function () {
     function MainComponent(http) {
         this.http = http;
-        this.headTable = ['Device ID', 'IP address', 'Hour', 'Date'];
+        this.headTable = ['Device ID', 'IP address', 'Precense', 'Battery', 'Hour', 'Date'];
         this.selectAll();
     }
     MainComponent.prototype.ngOnInit = function () { };

@@ -36,7 +36,7 @@ app.get('/register/:username/:password', user.register);
 app.post('/login', user.login);
 
 app.get('/sensor', sensor.selectAll);
-app.get('/sensor/:deviceId', sensor.data);
+app.post('/sensor', sensor.sensorStatus);
 
 // Frontend routes
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];
@@ -51,8 +51,3 @@ app.get('*', (req, res) => {
 
 http.createServer(app).listen(80);
 https.createServer(options, app).listen(443);
-
-/*
-    To generate the certificate:
-        openssl req -nodes -new -x509 -keyout server.key -out server.cert
- */

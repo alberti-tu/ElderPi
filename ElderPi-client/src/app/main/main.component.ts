@@ -9,7 +9,7 @@ import { Sensor } from '../models/sensor';
 })
 export class MainComponent implements OnInit {
 
-  headTable: string[] = ['Device ID', 'IP address', 'Hour', 'Date'];
+  headTable: string[] = ['Device ID', 'IP address', 'Precense', 'Battery','Hour', 'Date'];
   bodyTable: Sensor[];
 
   constructor(private http: HttpService) {
