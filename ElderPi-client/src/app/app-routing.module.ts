@@ -3,10 +3,11 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { LoginComponent } from './login/login.component';
 import { MainComponent } from './main/main.component';
+import { AuthenticationService } from './service/authentication.service';
 
 const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'main',  component: MainComponent },
+  { path: 'main',  component: MainComponent, canActivate: [AuthenticationService] },
   { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 

@@ -38,6 +38,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _main_main_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./main/main.component */ "./src/app/main/main.component.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./service/authentication.service */ "./src/app/service/authentication.service.ts");
+
 
 
 
@@ -45,7 +47,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var routes = [
     { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_3__["LoginComponent"] },
-    { path: 'main', component: _main_main_component__WEBPACK_IMPORTED_MODULE_4__["MainComponent"] },
+    { path: 'main', component: _main_main_component__WEBPACK_IMPORTED_MODULE_4__["MainComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_5__["AuthenticationService"]] },
     { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -217,6 +219,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
 /* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service/http.service */ "./src/app/service/http.service.ts");
 /* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
+
 
 
 
@@ -224,22 +228,25 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(http, router, toast) {
+    function LoginComponent(http, router, auth, toast) {
         this.http = http;
         this.router = router;
+        this.auth = auth;
         this.toast = toast;
         this.user = new _models_user__WEBPACK_IMPORTED_MODULE_5__["User"]();
     }
-    LoginComponent.prototype.ngOnInit = function () { };
+    LoginComponent.prototype.ngOnInit = function () {
+        if (_service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"].validToken())
+            this.router.navigateByUrl('/main');
+    };
     LoginComponent.prototype.login = function () {
         var _this = this;
         this.http.login(this.user).subscribe(function (result) {
-            if (result == 1) {
-                _this.toast.successToastr('Welcome ' + _this.user.username, 'Correct Login');
-                _this.router.navigateByUrl('/main');
-            }
-            else
-                _this.toast.errorToastr('Wrong email and / or password', 'You are not who I am waiting for');
+            if (result.token == '')
+                return _this.toast.errorToastr('Wrong email and / or password', 'You are not who I am waiting for');
+            _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"].setToken(result.token); // Save seasson token
+            _this.toast.successToastr('Welcome ' + _this.user.username, 'Correct Login');
+            _this.router.navigateByUrl('/main');
         });
     };
     LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -248,7 +255,7 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./login.component.html */ "./src/app/login/login.component.html"),
             styles: [__webpack_require__(/*! ./login.component.css */ "./src/app/login/login.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], LoginComponent);
     return LoginComponent;
 }());
@@ -275,7 +282,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.ip_address}}</td>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
+module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
 
 /***/ }),
 
@@ -298,7 +305,7 @@ __webpack_require__.r(__webpack_exports__);
 var MainComponent = /** @class */ (function () {
     function MainComponent(http) {
         this.http = http;
-        this.headTable = ['Device ID', 'IP address', 'Precense', 'Battery', 'Hour', 'Date'];
+        this.headTable = ['Device ID', 'Precense', 'Battery', 'Hour', 'Date'];
         this.selectAll();
     }
     MainComponent.prototype.ngOnInit = function () { };
@@ -341,6 +348,70 @@ var User = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/service/authentication.service.ts":
+/*!***************************************************!*\
+  !*** ./src/app/service/authentication.service.ts ***!
+  \***************************************************/
+/*! exports provided: AuthenticationService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthenticationService", function() { return AuthenticationService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_3__);
+
+
+
+
+var AuthenticationService = /** @class */ (function () {
+    function AuthenticationService(router) {
+        this.router = router;
+    }
+    AuthenticationService_1 = AuthenticationService;
+    AuthenticationService.prototype.canActivate = function () {
+        if (AuthenticationService_1.validToken())
+            return true;
+        this.router.navigateByUrl('/login');
+        return false;
+    };
+    AuthenticationService.setToken = function (token) {
+        localStorage.setItem('token', token);
+    };
+    AuthenticationService.getToken = function () {
+        return localStorage.getItem('token');
+    };
+    // Return the UTC seconds until the expiration of the token
+    AuthenticationService.getTokenExpirationDate = function (token) {
+        var decoded = jwt_decode__WEBPACK_IMPORTED_MODULE_3__(token);
+        if (decoded.expiration === undefined)
+            return null;
+        return new Date().setUTCSeconds(decoded.expiration).valueOf();
+    };
+    // Check if this token is valid
+    AuthenticationService.validToken = function () {
+        if (AuthenticationService_1.getToken() == null)
+            return false;
+        var expiration = AuthenticationService_1.getTokenExpirationDate(AuthenticationService_1.getToken());
+        if (expiration === undefined)
+            return false;
+        return expiration > new Date().valueOf();
+    };
+    var AuthenticationService_1;
+    AuthenticationService = AuthenticationService_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+    ], AuthenticationService);
+    return AuthenticationService;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/service/http.service.ts":
 /*!*****************************************!*\
   !*** ./src/app/service/http.service.ts ***!
@@ -354,6 +425,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./authentication.service */ "./src/app/service/authentication.service.ts");
+
 
 
 
@@ -365,12 +438,11 @@ var HttpService = /** @class */ (function () {
         return this.http.post(location.origin + '/login', user);
     };
     HttpService.prototype.sensor = function () {
-        return this.http.get(location.origin + '/sensor');
+        var tokenHeader = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
+        return this.http.get(location.origin + '/sensor', tokenHeader);
     };
     HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-            providedIn: 'root'
-        }),
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
     ], HttpService);
     return HttpService;

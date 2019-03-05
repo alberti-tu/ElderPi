@@ -9,11 +9,12 @@ const fs = require('fs');
 
 const options = { key: fs.readFileSync('certificate/server.key'), cert: fs.readFileSync('certificate/server.cert') };
 
-const network = require('./network/network');
-network.interfaces('wlan0');
-
+const auth = require('./routes/authentication');
 const user = require('./routes/user');
 const sensor = require('./routes/sensor');
+const network = require('./network/network');
+
+network.interfaces('wlan0');
 
 let app = express();
 
@@ -23,8 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// Redirect the traffic HTTP to HTTPS
-// Keep the traffic HTTP of the WSN
+// Redirect the traffic HTTP to HTTPS and keep the traffic HTTP of the WSN
 app.use(function(req, res, next) {
     let ip_remote = req.connection.remoteAddress.split('::ffff:')[1];  // sensor's IPv4 address
     if (req.secure || network.isFromLan(ip_remote)) next();
@@ -32,21 +32,16 @@ app.use(function(req, res, next) {
 });
 
 // Backend routes
-app.get('/register/:username/:password', user.register);
 app.post('/login', user.login);
 
-app.get('/sensor', sensor.selectAll);
+app.get('/sensor', auth.checkToken, sensor.selectAll);
 app.post('/sensor', sensor.sensorStatus);
 
 // Frontend routes
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];
 app.get('*', (req, res) => {
-    if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) {
-        res.sendFile(path.resolve('public/' + req.url));
-
-    } else {
-        res.sendFile(path.resolve('public/index.html'));
-    }
+    if (allowedExt.filter(ext => req.url.indexOf(ext) > 0).length > 0) res.sendFile(path.resolve('public/' + req.url));
+    else res.sendFile(path.resolve('public/index.html'));
 });
 
 http.createServer(app).listen(80);

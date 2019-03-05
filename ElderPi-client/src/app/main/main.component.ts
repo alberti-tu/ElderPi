@@ -9,14 +9,14 @@ import { Sensor } from '../models/sensor';
 })
 export class MainComponent implements OnInit {
 
-  headTable: string[] = ['Device ID', 'IP address', 'Precense', 'Battery','Hour', 'Date'];
+  headTable: string[] = ['Device ID', 'Precense', 'Battery','Hour', 'Date'];
   bodyTable: Sensor[];
 
   constructor(private http: HttpService) {
     this.selectAll();
   }
 
-  ngOnInit() { }
+  ngOnInit() {  }
 
   selectAll() {
     this.http.sensor().subscribe(result => { return this.bodyTable = result });

@@ -19,7 +19,7 @@ async function createDatabase() {
     await connection.query('USE ElderPi');
     await connection.query('CREATE TABLE users (username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL, UNIQUE KEY unique_user (username))');
     await connection.query('USE ElderPi');
-    await connection.query('CREATE TABLE sensors (deviceID VARCHAR(24) NOT NULL, ip_address VARCHAR(15), precense BOOLEAN DEFAULT FALSE, battery INT NOT NULL, timestamp DATETIME, UNIQUE KEY unique_user (deviceID))');
+    await connection.query('CREATE TABLE sensors (deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, battery INT NOT NULL, timestamp DATETIME, UNIQUE KEY unique_user (deviceID))');
     await connection.query('USE ElderPi');
     await connection.query('INSERT INTO users VALUES (?, ?)', ['admin', 'admin']);
     connection = await connection.end();
