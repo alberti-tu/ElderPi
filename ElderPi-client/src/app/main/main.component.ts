@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../service/http.service';
+import { SocketService } from '../service/socket.service';
 import { Sensor } from '../models/sensor';
 
 @Component({
@@ -12,14 +13,9 @@ export class MainComponent implements OnInit {
   headTable: string[] = ['Device ID', 'Precense', 'Battery','Hour', 'Date'];
   bodyTable: Sensor[];
 
-  constructor(private http: HttpService) {
-    this.selectAll();
+  constructor(private http: HttpService, private socket: SocketService) {
+    this.socket.updateTable().subscribe((sensor: Sensor[]) => { this.bodyTable = sensor });
   }
 
   ngOnInit() {  }
-
-  selectAll() {
-    this.http.sensor().subscribe(result => { return this.bodyTable = result });
-  }
-
 }

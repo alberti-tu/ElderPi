@@ -299,27 +299,27 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/http.service */ "./src/app/service/http.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+
 
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent(http) {
+    function MainComponent(http, socket) {
+        var _this = this;
         this.http = http;
+        this.socket = socket;
         this.headTable = ['Device ID', 'Precense', 'Battery', 'Hour', 'Date'];
-        this.selectAll();
+        this.socket.updateTable().subscribe(function (sensor) { _this.bodyTable = sensor; });
     }
     MainComponent.prototype.ngOnInit = function () { };
-    MainComponent.prototype.selectAll = function () {
-        var _this = this;
-        this.http.sensor().subscribe(function (result) { return _this.bodyTable = result; });
-    };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-main',
             template: __webpack_require__(/*! ./main.component.html */ "./src/app/main/main.component.html"),
             styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/main/main.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_3__["SocketService"]])
     ], MainComponent);
     return MainComponent;
 }());
@@ -434,12 +434,13 @@ var HttpService = /** @class */ (function () {
     function HttpService(http) {
         this.http = http;
     }
+    //location.origin
     HttpService.prototype.login = function (user) {
         return this.http.post(location.origin + '/login', user);
     };
     HttpService.prototype.sensor = function () {
         var tokenHeader = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
-        return this.http.get(location.origin + '/sensor', tokenHeader);
+        return this.http.get('https://192.168.1.13' + '/sensor', tokenHeader);
     };
     HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
@@ -449,6 +450,48 @@ var HttpService = /** @class */ (function () {
 }());
 
 // HTTP response as plain text --> {responseType: 'text'}
+
+
+/***/ }),
+
+/***/ "./src/app/service/socket.service.ts":
+/*!*******************************************!*\
+  !*** ./src/app/service/socket.service.ts ***!
+  \*******************************************/
+/*! exports provided: SocketService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SocketService", function() { return SocketService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_4__);
+
+
+
+
+
+var SocketService = /** @class */ (function () {
+    function SocketService() {
+        var _this = this;
+        this.updateTable = function () {
+            return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+                _this.socket.on('updateTable', function (message) { observer.next(message); });
+            });
+        };
+        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(location.origin, { secure: true, path: '/sensor', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
+    }
+    SocketService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])
+    ], SocketService);
+    return SocketService;
+}());
+
 
 
 /***/ }),
@@ -516,6 +559,17 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 
 module.exports = __webpack_require__(/*! /home/alberti_tu/Documentos/IDEA/ElderPi/ElderPi-client/src/main.ts */"./src/main.ts");
 
+
+/***/ }),
+
+/***/ 1:
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+/* (ignored) */
 
 /***/ })
 

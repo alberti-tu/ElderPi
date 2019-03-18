@@ -591,7 +591,7 @@ if(false) {}
 
 /***/ }),
 
-/***/ 2:
+/***/ 3:
 /*!******************************************************************************!*\
   !*** multi ./src/styles.css ./node_modules/bootstrap/dist/css/bootstrap.css ***!
   \******************************************************************************/
@@ -604,5 +604,5 @@ module.exports = __webpack_require__(/*! /home/alberti_tu/Documentos/IDEA/ElderP
 
 /***/ })
 
-},[[2,"runtime"]]]);
+},[[3,"runtime"]]]);
 //# sourceMappingURL=styles.js.map
