@@ -16,9 +16,11 @@ export class HttpService {
 
 // HTTP response as plain text --> {responseType: 'text'}
 
+
+
 /*
-  public sensor() {
-    let tokenHeader = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
-    return this.http.get<Sensor[]>('https://192.168.1.13' + '/sensor', tokenHeader)
-  }
+public getTable() {
+  let tokenHeader = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
+  return this.http.get<Sensor[]>('https://192.168.1.13' + '/sensor', tokenHeader)
+}
 */

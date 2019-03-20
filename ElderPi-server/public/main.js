@@ -141,6 +141,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
 /* harmony import */ var _main_main_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./main/main.component */ "./src/app/main/main.component.ts");
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
+/* harmony import */ var _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./navbar/navbar.component */ "./src/app/navbar/navbar.component.ts");
+
 
 
 
@@ -160,7 +162,8 @@ var AppModule = /** @class */ (function () {
             declarations: [
                 _app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"],
                 _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"],
-                _main_main_component__WEBPACK_IMPORTED_MODULE_9__["MainComponent"]
+                _main_main_component__WEBPACK_IMPORTED_MODULE_9__["MainComponent"],
+                _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__["NavbarComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -228,10 +231,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var LoginComponent = /** @class */ (function () {
-    function LoginComponent(http, router, auth, toast) {
+    function LoginComponent(http, router, toast) {
         this.http = http;
         this.router = router;
-        this.auth = auth;
         this.toast = toast;
         this.user = new _models_user__WEBPACK_IMPORTED_MODULE_5__["User"]();
     }
@@ -255,7 +257,7 @@ var LoginComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./login.component.html */ "./src/app/login/login.component.html"),
             styles: [__webpack_require__(/*! ./login.component.css */ "./src/app/login/login.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], LoginComponent);
     return LoginComponent;
 }());
@@ -282,7 +284,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
+module.exports = "<app-navbar></app-navbar>\n<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
 
 /***/ }),
 
@@ -298,28 +300,42 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainComponent", function() { return MainComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/http.service */ "./src/app/service/http.service.ts");
-/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
+
 
 
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent(http, socket) {
-        var _this = this;
-        this.http = http;
+    function MainComponent(socket, auth, toast) {
         this.socket = socket;
+        this.auth = auth;
+        this.toast = toast;
         this.headTable = ['Device ID', 'Precense', 'Battery', 'Hour', 'Date'];
-        this.socket.updateTable().subscribe(function (sensor) { _this.bodyTable = sensor; });
+        this.sensorData();
     }
     MainComponent.prototype.ngOnInit = function () { };
+    MainComponent.prototype.sensorData = function () {
+        var _this = this;
+        this.socket.openSocket();
+        this.socket.updateTable().subscribe(function (sensor) {
+            if (_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].validToken())
+                _this.bodyTable = sensor;
+            else {
+                _this.toast.errorToastr('Identify yourself again', 'Seasson token expired');
+                _this.auth.logout();
+            }
+        });
+    };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-main',
             template: __webpack_require__(/*! ./main.component.html */ "./src/app/main/main.component.html"),
             styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/main/main.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_3__["SocketService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_2__["SocketService"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_4__["ToastrManager"]])
     ], MainComponent);
     return MainComponent;
 }());
@@ -348,6 +364,81 @@ var User = /** @class */ (function () {
 
 /***/ }),
 
+/***/ "./src/app/navbar/navbar.component.css":
+/*!*********************************************!*\
+  !*** ./src/app/navbar/navbar.component.css ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL25hdmJhci9uYXZiYXIuY29tcG9uZW50LmNzcyJ9 */"
+
+/***/ }),
+
+/***/ "./src/app/navbar/navbar.component.html":
+/*!**********************************************!*\
+  !*** ./src/app/navbar/navbar.component.html ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"#\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 1</a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 2</a>\n      </li>\n\n      <li class=\"nav-item\">\n        <button class=\"btn btn-outline-success\" (click)=\"logout()\">Sign Out</button>\n      </li>\n\n    </ul>\n  </div>\n</nav>\n"
+
+/***/ }),
+
+/***/ "./src/app/navbar/navbar.component.ts":
+/*!********************************************!*\
+  !*** ./src/app/navbar/navbar.component.ts ***!
+  \********************************************/
+/*! exports provided: NavbarComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NavbarComponent", function() { return NavbarComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+
+
+
+
+
+
+var NavbarComponent = /** @class */ (function () {
+    function NavbarComponent(socket, router, auth, toast) {
+        this.socket = socket;
+        this.router = router;
+        this.auth = auth;
+        this.toast = toast;
+        this.navbarOpen = false;
+    }
+    NavbarComponent.prototype.ngOnInit = function () { };
+    NavbarComponent.prototype.toggleNavbar = function () {
+        this.navbarOpen = !this.navbarOpen;
+    };
+    NavbarComponent.prototype.logout = function () {
+        this.toast.successToastr('You have closed your session succesfuly', 'Session finished');
+        this.auth.logout();
+    };
+    NavbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-navbar',
+            template: __webpack_require__(/*! ./navbar.component.html */ "./src/app/navbar/navbar.component.html"),
+            styles: [__webpack_require__(/*! ./navbar.component.css */ "./src/app/navbar/navbar.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_5__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
+    ], NavbarComponent);
+    return NavbarComponent;
+}());
+
+
+
+/***/ }),
+
 /***/ "./src/app/service/authentication.service.ts":
 /*!***************************************************!*\
   !*** ./src/app/service/authentication.service.ts ***!
@@ -361,14 +452,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
-/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_4__);
+
 
 
 
 
 var AuthenticationService = /** @class */ (function () {
-    function AuthenticationService(router) {
+    function AuthenticationService(socket, router) {
+        this.socket = socket;
         this.router = router;
     }
     AuthenticationService_1 = AuthenticationService;
@@ -386,7 +480,7 @@ var AuthenticationService = /** @class */ (function () {
     };
     // Return the UTC seconds until the expiration of the token
     AuthenticationService.getTokenExpirationDate = function (token) {
-        var decoded = jwt_decode__WEBPACK_IMPORTED_MODULE_3__(token);
+        var decoded = jwt_decode__WEBPACK_IMPORTED_MODULE_4__(token);
         if (decoded.expiration === undefined)
             return null;
         return new Date().setUTCSeconds(decoded.expiration).valueOf();
@@ -400,10 +494,16 @@ var AuthenticationService = /** @class */ (function () {
             return false;
         return expiration > new Date().valueOf();
     };
+    // Close the seasson
+    AuthenticationService.prototype.logout = function () {
+        localStorage.clear();
+        this.socket.closeSocket();
+        this.router.navigateByUrl('/login');
+    };
     var AuthenticationService_1;
     AuthenticationService = AuthenticationService_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_socket_service__WEBPACK_IMPORTED_MODULE_3__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], AuthenticationService);
     return AuthenticationService;
 }());
@@ -425,8 +525,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
-/* harmony import */ var _authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./authentication.service */ "./src/app/service/authentication.service.ts");
-
 
 
 
@@ -438,10 +536,6 @@ var HttpService = /** @class */ (function () {
     HttpService.prototype.login = function (user) {
         return this.http.post(location.origin + '/login', user);
     };
-    HttpService.prototype.sensor = function () {
-        var tokenHeader = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
-        return this.http.get('https://192.168.1.13' + '/sensor', tokenHeader);
-    };
     HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpClient"]])
@@ -450,6 +544,12 @@ var HttpService = /** @class */ (function () {
 }());
 
 // HTTP response as plain text --> {responseType: 'text'}
+/*
+public getTable() {
+  let tokenHeader = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
+  return this.http.get<Sensor[]>('https://192.168.1.13' + '/sensor', tokenHeader)
+}
+*/
 
 
 /***/ }),
@@ -477,14 +577,19 @@ __webpack_require__.r(__webpack_exports__);
 
 var SocketService = /** @class */ (function () {
     function SocketService() {
-        var _this = this;
-        this.updateTable = function () {
-            return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
-                _this.socket.on('updateTable', function (message) { observer.next(message); });
-            });
-        };
-        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(location.origin, { secure: true, path: '/sensor', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
     }
+    SocketService.prototype.openSocket = function () {
+        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(location.origin, { secure: true, path: '/sensor', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
+    };
+    SocketService.prototype.updateTable = function () {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+            _this.socket.on('updateTable', function (message) { observer.next(message); });
+        });
+    };
+    SocketService.prototype.closeSocket = function () {
+        this.socket.disconnect();
+    };
     SocketService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [])

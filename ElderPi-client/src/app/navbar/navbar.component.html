@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <a class="navbar-brand" href="#">ElderPi</a>
+
+  <!-- Collapse Button -->
+  <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <!-- Expand the menu -->
+  <div class="collapse navbar-collapse" [ngClass]="{'show': navbarOpen}">
+    <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item">
+        <a class="nav-link" href="#">Item 1</a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="#">Item 2</a>
+      </li>
+
+      <li class="nav-item">
+        <button class="btn btn-outline-success" (click)="logout()">Sign Out</button>
+      </li>
+
+    </ul>
+  </div>
+</nav>

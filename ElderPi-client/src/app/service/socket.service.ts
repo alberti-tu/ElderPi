@@ -8,13 +8,19 @@ export class SocketService {
 
   private socket;
 
-  constructor() {
+  constructor() { }
+
+  public openSocket() {
     this.socket = io(location.origin, { secure: true,  path: '/sensor', query: {authorization: AuthenticationService.getToken()} });
   }
 
-  public updateTable = () => {
+  public updateTable() {
     return new Observable(observer => {
       this.socket.on('updateTable', (message) => { observer.next(message) });
     });
+  }
+
+  public closeSocket() {
+    this.socket.disconnect();
   }
 }

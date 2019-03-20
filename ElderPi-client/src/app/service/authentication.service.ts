@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { SocketService } from './socket.service';
 import * as jwt_decode from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{
 
-  constructor(private router: Router) { }
+  constructor(private socket: SocketService, private router: Router) { }
 
   canActivate() {
     if (AuthenticationService.validToken()) return true;
@@ -37,5 +38,12 @@ export class AuthenticationService implements CanActivate{
     if(expiration === undefined) return false;
 
     return expiration > new Date().valueOf();
+  }
+
+  // Close the seasson
+  logout(): void {
+    localStorage.clear();
+    this.socket.closeSocket();
+    this.router.navigateByUrl('/login');
   }
 }

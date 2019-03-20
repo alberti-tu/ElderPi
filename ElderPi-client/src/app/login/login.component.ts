@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
   user: User;
 
-  constructor(private http: HttpService, private router: Router, private auth: AuthenticationService, private toast: ToastrManager) {
+  constructor(private http: HttpService, private router: Router, private toast: ToastrManager) {
     this.user = new User();
   }
 
