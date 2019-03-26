@@ -1,12 +1,24 @@
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
+import { ToastrManager } from 'ng6-toastr-notifications';
 import { SocketService } from './socket.service';
 import * as jwt_decode from 'jwt-decode';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{
 
-  constructor(private socket: SocketService, private router: Router) { }
+  constructor(private socket: SocketService, private router: Router, private toast: ToastrManager) {
+    // Check at every second if the token is valid
+    setInterval(function() {
+      if(!AuthenticationService.validToken() && router.url !== '/login') {
+        // Close the seasion
+        toast.errorToastr('Identify yourself again', 'Season token has expired');
+        localStorage.clear();
+        socket.closeSocket();
+        router.navigateByUrl('/login');
+      }
+    },1000);
+  }
 
   canActivate() {
     if (AuthenticationService.validToken()) return true;

@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
     this.http.login(this.user).subscribe(result => {
       if(result.token == '') return this.toast.errorToastr('Wrong email and / or password', 'You are not who I am waiting for');
 
-      AuthenticationService.setToken(result.token); // Save seasson token
+      AuthenticationService.setToken(result.token); // Save season token
 
       this.toast.successToastr('Welcome ' + this.user.username, 'Correct Login');
       this.router.navigateByUrl('/main');

@@ -246,7 +246,7 @@ var LoginComponent = /** @class */ (function () {
         this.http.login(this.user).subscribe(function (result) {
             if (result.token == '')
                 return _this.toast.errorToastr('Wrong email and / or password', 'You are not who I am waiting for');
-            _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"].setToken(result.token); // Save seasson token
+            _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"].setToken(result.token); // Save season token
             _this.toast.successToastr('Welcome ' + _this.user.username, 'Correct Login');
             _this.router.navigateByUrl('/main');
         });
@@ -284,7 +284,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n<table class=\"table table-bordered table-hover\">\n  <thead class=\"thead-dark text-center\">\n  <tr>\n    <th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th>\n  </tr>\n  </thead>\n  <tbody class=\"text-center\">\n  <tr *ngFor=\"let item of bodyTable\">\n    <th scope=\"row\">{{item.deviceID}}</th>\n    <td>{{item.precense ? 'Yes' : 'No'}}</td>\n    <td>{{item.battery}}%</td>\n    <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n    <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n  </tr>\n  </tbody>\n</table>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceID}}</th>\n      <td>{{item.precense ? 'Yes' : 'No'}}</td>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -301,18 +301,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
-/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
-/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
-
-
 
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent(socket, auth, toast) {
+    function MainComponent(socket) {
         this.socket = socket;
-        this.auth = auth;
-        this.toast = toast;
         this.headTable = ['Device ID', 'Precense', 'Battery', 'Hour', 'Date'];
         this.sensorData();
     }
@@ -321,12 +315,7 @@ var MainComponent = /** @class */ (function () {
         var _this = this;
         this.socket.openSocket();
         this.socket.updateTable().subscribe(function (sensor) {
-            if (_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].validToken())
-                _this.bodyTable = sensor;
-            else {
-                _this.toast.errorToastr('Identify yourself again', 'Seasson token expired');
-                _this.auth.logout();
-            }
+            _this.bodyTable = sensor;
         });
     };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
@@ -335,7 +324,7 @@ var MainComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./main.component.html */ "./src/app/main/main.component.html"),
             styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/main/main.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_2__["SocketService"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_4__["ToastrManager"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_2__["SocketService"]])
     ], MainComponent);
     return MainComponent;
 }());
@@ -382,7 +371,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"#\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 1</a>\n      </li>\n\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 2</a>\n      </li>\n\n      <li class=\"nav-item\">\n        <button class=\"btn btn-outline-success\" (click)=\"logout()\">Sign Out</button>\n      </li>\n\n    </ul>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"#\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 1</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 2</a>\n      </li>\n    </ul>\n    <button class=\"btn btn-outline-success my-2 my-sm-0\" (click)=\"logout()\">Sign Out</button>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -452,18 +441,31 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./socket.service */ "./src/app/service/socket.service.ts");
-/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
-/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
+/* harmony import */ var _socket_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jwt-decode */ "./node_modules/jwt-decode/lib/index.js");
+/* harmony import */ var jwt_decode__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(jwt_decode__WEBPACK_IMPORTED_MODULE_5__);
+
 
 
 
 
 
 var AuthenticationService = /** @class */ (function () {
-    function AuthenticationService(socket, router) {
+    function AuthenticationService(socket, router, toast) {
         this.socket = socket;
         this.router = router;
+        this.toast = toast;
+        // Check at every second if the token is valid
+        setInterval(function () {
+            if (!AuthenticationService_1.validToken() && router.url !== '/login') {
+                // Close the seasion
+                toast.errorToastr('Identify yourself again', 'Season token has expired');
+                localStorage.clear();
+                socket.closeSocket();
+                router.navigateByUrl('/login');
+            }
+        }, 1000);
     }
     AuthenticationService_1 = AuthenticationService;
     AuthenticationService.prototype.canActivate = function () {
@@ -480,7 +482,7 @@ var AuthenticationService = /** @class */ (function () {
     };
     // Return the UTC seconds until the expiration of the token
     AuthenticationService.getTokenExpirationDate = function (token) {
-        var decoded = jwt_decode__WEBPACK_IMPORTED_MODULE_4__(token);
+        var decoded = jwt_decode__WEBPACK_IMPORTED_MODULE_5__(token);
         if (decoded.expiration === undefined)
             return null;
         return new Date().setUTCSeconds(decoded.expiration).valueOf();
@@ -503,7 +505,7 @@ var AuthenticationService = /** @class */ (function () {
     var AuthenticationService_1;
     AuthenticationService = AuthenticationService_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_socket_service__WEBPACK_IMPORTED_MODULE_3__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_socket_service__WEBPACK_IMPORTED_MODULE_4__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], AuthenticationService);
     return AuthenticationService;
 }());
@@ -532,7 +534,6 @@ var HttpService = /** @class */ (function () {
     function HttpService(http) {
         this.http = http;
     }
-    //location.origin
     HttpService.prototype.login = function (user) {
         return this.http.post(location.origin + '/login', user);
     };

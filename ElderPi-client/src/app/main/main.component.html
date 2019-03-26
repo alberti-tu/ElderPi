@@ -1,17 +1,18 @@
 <app-navbar></app-navbar>
-<table class="table table-bordered table-hover">
-  <thead class="thead-dark text-center">
-  <tr>
-    <th scope="col" *ngFor="let column of headTable">{{column}}</th>
-  </tr>
-  </thead>
+
+<div class="table-responsive">
+  <table class="table table-bordered table-hover">
+    <thead class="thead-dark text-center">
+      <tr><th scope="col" *ngFor="let column of headTable">{{column}}</th></tr>
+    </thead>
   <tbody class="text-center">
-  <tr *ngFor="let item of bodyTable">
-    <th scope="row">{{item.deviceID}}</th>
-    <td>{{item.precense ? 'Yes' : 'No'}}</td>
-    <td>{{item.battery}}%</td>
-    <td>{{item.timestamp | date:"HH:mm:ss" }}</td>
-    <td>{{item.timestamp | date:"dd/MM/yyyy" }}</td>
-  </tr>
-  </tbody>
-</table>
+    <tr *ngFor="let item of bodyTable">
+      <th scope="row">{{item.deviceID}}</th>
+      <td>{{item.precense ? 'Yes' : 'No'}}</td>
+      <td>{{item.battery}}%</td>
+      <td>{{item.timestamp | date:"HH:mm:ss" }}</td>
+      <td>{{item.timestamp | date:"dd/MM/yyyy" }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

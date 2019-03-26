@@ -9,19 +9,13 @@
   <!-- Expand the menu -->
   <div class="collapse navbar-collapse" [ngClass]="{'show': navbarOpen}">
     <ul class="navbar-nav mr-auto">
-
       <li class="nav-item">
         <a class="nav-link" href="#">Item 1</a>
       </li>
-
       <li class="nav-item">
         <a class="nav-link" href="#">Item 2</a>
       </li>
-
-      <li class="nav-item">
-        <button class="btn btn-outline-success" (click)="logout()">Sign Out</button>
-      </li>
-
     </ul>
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="logout()">Sign Out</button>
   </div>
 </nav>

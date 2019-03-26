@@ -1,22 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { User } from '../models/user';
-import { AuthenticationService } from './authentication.service';
 
 @Injectable({ providedIn: 'root' })
 export class HttpService {
 
   constructor( private http: HttpClient ) { }
 
-  //location.origin
   public login(user: User) {
     return this.http.post<User>(location.origin + '/login', user);
   }
 }
 
 // HTTP response as plain text --> {responseType: 'text'}
-
-
 
 /*
 public getTable() {
