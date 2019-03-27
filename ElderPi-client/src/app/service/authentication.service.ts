@@ -3,6 +3,7 @@ import { Router, CanActivate } from '@angular/router';
 import { ToastrManager } from 'ng6-toastr-notifications';
 import { SocketService } from './socket.service';
 import * as jwt_decode from 'jwt-decode';
+import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{
@@ -10,6 +11,7 @@ export class AuthenticationService implements CanActivate{
   constructor(private socket: SocketService, private router: Router, private toast: ToastrManager) {
     // Check at every second if the token is valid
     setInterval(function() {
+      console.log('hola');
       if(!AuthenticationService.validToken() && router.url !== '/login') {
         // Close the seasion
         toast.errorToastr('Identify yourself again', 'Season token has expired');
@@ -35,21 +37,14 @@ export class AuthenticationService implements CanActivate{
     return localStorage.getItem('token');
   }
 
-  // Return the UTC seconds until the expiration of the token
-  static getTokenExpirationDate(token: string): number {
-    const decoded = jwt_decode(token);
-    if (decoded.expiration === undefined) return null;
-    return new Date().setUTCSeconds(decoded.expiration).valueOf();
-  }
-
   // Check if this token is valid
   static validToken(): boolean {
     if(AuthenticationService.getToken() == null) return false;
 
-    const expiration = AuthenticationService.getTokenExpirationDate( AuthenticationService.getToken() );
-    if(expiration === undefined) return false;
+    const token = jwt_decode(AuthenticationService.getToken());
 
-    return expiration > new Date().valueOf();
+    if (token.expiration === undefined) return null;
+    return token.expiration > moment().unix();
   }
 
   // Close the seasson
