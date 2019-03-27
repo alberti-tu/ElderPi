@@ -15,7 +15,7 @@ const app = express();
 // Server inicialization
 const http = require('http').createServer(app).listen(80);
 const https = require('https').createServer(options, app).listen(443);
-const io = require('socket.io').listen(https, { path: '/sensor'});
+const io = require('socket.io').listen(https, { path: '/sensor/io'});
 
 // Configurations
 app.use(cors());
@@ -41,7 +41,9 @@ app.use(function(req, res, next) {
 
 // Backend routes
 app.post('/login', user.login);
+
 app.post('/sensor', sensor.updateSensor, sensor.updateClient);
+app.put('/sensor', auth.getToken, sensor.updateNameDevice, sensor.updateClient);
 
 // Socket events
 io.on('connection', (socket) => { sensor.getSocket(io) });

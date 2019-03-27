@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrManager } from 'ng6-toastr-notifications';
 
-import { HttpService } from '../service/http.service';
-import { User } from '../models/user';
-import { AuthenticationService } from '../service/authentication.service';
+import { HttpService } from '../../service/http.service';
+import { User } from '../../models/user';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-login',

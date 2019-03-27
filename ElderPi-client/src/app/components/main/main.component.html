@@ -7,7 +7,7 @@
     </thead>
   <tbody class="text-center">
     <tr *ngFor="let item of bodyTable">
-      <th scope="row">{{item.deviceID}}</th>
+      <th scope="row">{{item.deviceName || item.deviceID}}</th>
       <td>{{item.precense ? 'Yes' : 'No'}}</td>
       <td>{{item.battery}}%</td>
       <td>{{item.timestamp | date:"HH:mm:ss" }}</td>

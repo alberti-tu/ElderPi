@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { SocketService } from '../service/socket.service';
-import { Sensor } from '../models/sensor';
+import { SocketService } from '../../service/socket.service';
+import { Sensor } from '../../models/sensor';
+import {HttpService} from '../../service/http.service';
 
 @Component({
   selector: 'app-main',
@@ -9,10 +10,10 @@ import { Sensor } from '../models/sensor';
 })
 export class MainComponent implements OnInit {
 
-  headTable: string[] = ['Device ID', 'Precense', 'Battery','Hour', 'Date'];
+  headTable: string[] = ['Location', 'Precense', 'Battery','Hour', 'Date'];
   bodyTable: Sensor[];
 
-  constructor(private socket: SocketService) {
+  constructor(private http: HttpService, private socket: SocketService) {
     this.sensorData();
   }
 

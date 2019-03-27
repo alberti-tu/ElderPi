@@ -323,9 +323,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
-/* harmony import */ var _main_main_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./main/main.component */ "./src/app/main/main.component.ts");
-/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./service/authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/components/login/login.component.ts");
+/* harmony import */ var _components_main_main_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/main/main.component */ "./src/app/components/main/main.component.ts");
+/* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./service/authentication.service */ "./src/app/service/authentication.service.ts");
+
 
 
 
@@ -333,8 +335,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var routes = [
-    { path: 'login', component: _login_login_component__WEBPACK_IMPORTED_MODULE_3__["LoginComponent"] },
-    { path: 'main', component: _main_main_component__WEBPACK_IMPORTED_MODULE_4__["MainComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_5__["AuthenticationService"]] },
+    { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_3__["LoginComponent"] },
+    { path: 'main', component: _components_main_main_component__WEBPACK_IMPORTED_MODULE_4__["MainComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"]] },
+    { path: 'sensor', component: _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_5__["SensorComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_6__["AuthenticationService"]] },
     { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -425,10 +428,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
 /* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
 /* harmony import */ var _app_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./app.component */ "./src/app/app.component.ts");
-/* harmony import */ var _login_login_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./login/login.component */ "./src/app/login/login.component.ts");
-/* harmony import */ var _main_main_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./main/main.component */ "./src/app/main/main.component.ts");
+/* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/components/login/login.component.ts");
+/* harmony import */ var _components_main_main_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/main/main.component */ "./src/app/components/main/main.component.ts");
 /* harmony import */ var _app_routing_module__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./app-routing.module */ "./src/app/app-routing.module.ts");
-/* harmony import */ var _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./navbar/navbar.component */ "./src/app/navbar/navbar.component.ts");
+/* harmony import */ var _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/navbar/navbar.component */ "./src/app/components/navbar/navbar.component.ts");
+/* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
+
 
 
 
@@ -448,9 +453,10 @@ var AppModule = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_3__["NgModule"])({
             declarations: [
                 _app_component__WEBPACK_IMPORTED_MODULE_7__["AppComponent"],
-                _login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"],
-                _main_main_component__WEBPACK_IMPORTED_MODULE_9__["MainComponent"],
-                _navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__["NavbarComponent"]
+                _components_login_login_component__WEBPACK_IMPORTED_MODULE_8__["LoginComponent"],
+                _components_main_main_component__WEBPACK_IMPORTED_MODULE_9__["MainComponent"],
+                _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__["NavbarComponent"],
+                _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_12__["SensorComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -471,21 +477,21 @@ var AppModule = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/login/login.component.css":
-/*!*******************************************!*\
-  !*** ./src/app/login/login.component.css ***!
-  \*******************************************/
+/***/ "./src/app/components/login/login.component.css":
+/*!******************************************************!*\
+  !*** ./src/app/components/login/login.component.css ***!
+  \******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = ".ng-valid[required] {\n  border-left: 5px solid #42A948;\n}\n\n.ng-invalid:not(form) {\n  border-left: 5px solid #a94442;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbG9naW4vbG9naW4uY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLDhCQUE4QjtBQUNoQzs7QUFFQTtFQUNFLDhCQUE4QjtBQUNoQyIsImZpbGUiOiJzcmMvYXBwL2xvZ2luL2xvZ2luLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubmctdmFsaWRbcmVxdWlyZWRdIHtcbiAgYm9yZGVyLWxlZnQ6IDVweCBzb2xpZCAjNDJBOTQ4O1xufVxuXG4ubmctaW52YWxpZDpub3QoZm9ybSkge1xuICBib3JkZXItbGVmdDogNXB4IHNvbGlkICNhOTQ0NDI7XG59XG4iXX0= */"
+module.exports = ".ng-valid[required] {\n  border-left: 5px solid #42A948;\n}\n\n.ng-invalid:not(form) {\n  border-left: 5px solid #a94442;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy9sb2dpbi9sb2dpbi5jb21wb25lbnQuY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsOEJBQThCO0FBQ2hDOztBQUVBO0VBQ0UsOEJBQThCO0FBQ2hDIiwiZmlsZSI6InNyYy9hcHAvY29tcG9uZW50cy9sb2dpbi9sb2dpbi5jb21wb25lbnQuY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLm5nLXZhbGlkW3JlcXVpcmVkXSB7XG4gIGJvcmRlci1sZWZ0OiA1cHggc29saWQgIzQyQTk0ODtcbn1cblxuLm5nLWludmFsaWQ6bm90KGZvcm0pIHtcbiAgYm9yZGVyLWxlZnQ6IDVweCBzb2xpZCAjYTk0NDQyO1xufVxuIl19 */"
 
 /***/ }),
 
-/***/ "./src/app/login/login.component.html":
-/*!********************************************!*\
-  !*** ./src/app/login/login.component.html ***!
-  \********************************************/
+/***/ "./src/app/components/login/login.component.html":
+/*!*******************************************************!*\
+  !*** ./src/app/components/login/login.component.html ***!
+  \*******************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -493,10 +499,10 @@ module.exports = "<div class=\"container\">\n  <h1>Login</h1>\n  <form #form=\"n
 
 /***/ }),
 
-/***/ "./src/app/login/login.component.ts":
-/*!******************************************!*\
-  !*** ./src/app/login/login.component.ts ***!
-  \******************************************/
+/***/ "./src/app/components/login/login.component.ts":
+/*!*****************************************************!*\
+  !*** ./src/app/components/login/login.component.ts ***!
+  \*****************************************************/
 /*! exports provided: LoginComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -507,9 +513,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
-/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service/http.service */ "./src/app/service/http.service.ts");
-/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../models/user */ "./src/app/models/user.ts");
-/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+/* harmony import */ var _models_user__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../models/user */ "./src/app/models/user.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../service/authentication.service */ "./src/app/service/authentication.service.ts");
 
 
 
@@ -541,8 +547,8 @@ var LoginComponent = /** @class */ (function () {
     LoginComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-login',
-            template: __webpack_require__(/*! ./login.component.html */ "./src/app/login/login.component.html"),
-            styles: [__webpack_require__(/*! ./login.component.css */ "./src/app/login/login.component.css")]
+            template: __webpack_require__(/*! ./login.component.html */ "./src/app/components/login/login.component.html"),
+            styles: [__webpack_require__(/*! ./login.component.css */ "./src/app/components/login/login.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], LoginComponent);
@@ -553,32 +559,32 @@ var LoginComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/main/main.component.css":
-/*!*****************************************!*\
-  !*** ./src/app/main/main.component.css ***!
-  \*****************************************/
+/***/ "./src/app/components/main/main.component.css":
+/*!****************************************************!*\
+  !*** ./src/app/components/main/main.component.css ***!
+  \****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL21haW4vbWFpbi5jb21wb25lbnQuY3NzIn0= */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvbWFpbi9tYWluLmNvbXBvbmVudC5jc3MifQ== */"
 
 /***/ }),
 
-/***/ "./src/app/main/main.component.html":
-/*!******************************************!*\
-  !*** ./src/app/main/main.component.html ***!
-  \******************************************/
+/***/ "./src/app/components/main/main.component.html":
+/*!*****************************************************!*\
+  !*** ./src/app/components/main/main.component.html ***!
+  \*****************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceID}}</th>\n      <td>{{item.precense ? 'Yes' : 'No'}}</td>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.precense ? 'Yes' : 'No'}}</td>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
-/***/ "./src/app/main/main.component.ts":
-/*!****************************************!*\
-  !*** ./src/app/main/main.component.ts ***!
-  \****************************************/
+/***/ "./src/app/components/main/main.component.ts":
+/*!***************************************************!*\
+  !*** ./src/app/components/main/main.component.ts ***!
+  \***************************************************/
 /*! exports provided: MainComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -587,14 +593,17 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MainComponent", function() { return MainComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+
 
 
 
 var MainComponent = /** @class */ (function () {
-    function MainComponent(socket) {
+    function MainComponent(http, socket) {
+        this.http = http;
         this.socket = socket;
-        this.headTable = ['Device ID', 'Precense', 'Battery', 'Hour', 'Date'];
+        this.headTable = ['Location', 'Precense', 'Battery', 'Hour', 'Date'];
         this.sensorData();
     }
     MainComponent.prototype.ngOnInit = function () { };
@@ -608,10 +617,10 @@ var MainComponent = /** @class */ (function () {
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-main',
-            template: __webpack_require__(/*! ./main.component.html */ "./src/app/main/main.component.html"),
-            styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/main/main.component.css")]
+            template: __webpack_require__(/*! ./main.component.html */ "./src/app/components/main/main.component.html"),
+            styles: [__webpack_require__(/*! ./main.component.css */ "./src/app/components/main/main.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_2__["SocketService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_3__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_2__["SocketService"]])
     ], MainComponent);
     return MainComponent;
 }());
@@ -620,52 +629,32 @@ var MainComponent = /** @class */ (function () {
 
 /***/ }),
 
-/***/ "./src/app/models/user.ts":
-/*!********************************!*\
-  !*** ./src/app/models/user.ts ***!
-  \********************************/
-/*! exports provided: User */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
-var User = /** @class */ (function () {
-    function User() {
-    }
-    return User;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/navbar/navbar.component.css":
-/*!*********************************************!*\
-  !*** ./src/app/navbar/navbar.component.css ***!
-  \*********************************************/
+/***/ "./src/app/components/navbar/navbar.component.css":
+/*!********************************************************!*\
+  !*** ./src/app/components/navbar/navbar.component.css ***!
+  \********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL25hdmJhci9uYXZiYXIuY29tcG9uZW50LmNzcyJ9 */"
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvbmF2YmFyL25hdmJhci5jb21wb25lbnQuY3NzIn0= */"
 
 /***/ }),
 
-/***/ "./src/app/navbar/navbar.component.html":
-/*!**********************************************!*\
-  !*** ./src/app/navbar/navbar.component.html ***!
-  \**********************************************/
+/***/ "./src/app/components/navbar/navbar.component.html":
+/*!*********************************************************!*\
+  !*** ./src/app/components/navbar/navbar.component.html ***!
+  \*********************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" href=\"#\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 1</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 2</a>\n      </li>\n    </ul>\n    <button class=\"btn btn-outline-success my-2 my-sm-0\" (click)=\"logout()\">Sign Out</button>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"/sensor\">Sensor</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#\">Item 2</a>\n      </li>\n    </ul>\n    <button class=\"btn btn-outline-success my-2 my-sm-0\" (click)=\"logout()\">Sign Out</button>\n  </div>\n</nav>\n"
 
 /***/ }),
 
-/***/ "./src/app/navbar/navbar.component.ts":
-/*!********************************************!*\
-  !*** ./src/app/navbar/navbar.component.ts ***!
-  \********************************************/
+/***/ "./src/app/components/navbar/navbar.component.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/components/navbar/navbar.component.ts ***!
+  \*******************************************************/
 /*! exports provided: NavbarComponent */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -676,8 +665,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
-/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../service/authentication.service */ "./src/app/service/authentication.service.ts");
-/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../service/authentication.service */ "./src/app/service/authentication.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
 
 
 
@@ -703,12 +692,101 @@ var NavbarComponent = /** @class */ (function () {
     NavbarComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-navbar',
-            template: __webpack_require__(/*! ./navbar.component.html */ "./src/app/navbar/navbar.component.html"),
-            styles: [__webpack_require__(/*! ./navbar.component.css */ "./src/app/navbar/navbar.component.css")]
+            template: __webpack_require__(/*! ./navbar.component.html */ "./src/app/components/navbar/navbar.component.html"),
+            styles: [__webpack_require__(/*! ./navbar.component.css */ "./src/app/components/navbar/navbar.component.css")]
         }),
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_socket_service__WEBPACK_IMPORTED_MODULE_5__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], _service_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], NavbarComponent);
     return NavbarComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/sensor/sensor.component.css":
+/*!********************************************************!*\
+  !*** ./src/app/components/sensor/sensor.component.css ***!
+  \********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvc2Vuc29yL3NlbnNvci5jb21wb25lbnQuY3NzIn0= */"
+
+/***/ }),
+
+/***/ "./src/app/components/sensor/sensor.component.html":
+/*!*********************************************************!*\
+  !*** ./src/app/components/sensor/sensor.component.html ***!
+  \*********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"sendName(deviceName.value, deviceID.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/sensor/sensor.component.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/components/sensor/sensor.component.ts ***!
+  \*******************************************************/
+/*! exports provided: SensorComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SensorComponent", function() { return SensorComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+
+
+
+
+var SensorComponent = /** @class */ (function () {
+    function SensorComponent(http, router) {
+        this.http = http;
+        this.router = router;
+        //list = [{ deviceID: '123' }, { deviceID: '1234' }, { deviceID: '490024001151373331333230' }];
+        this.list = [{ deviceID: '490024001151373331333230' }];
+    }
+    SensorComponent.prototype.ngOnInit = function () { };
+    SensorComponent.prototype.sendName = function (deviceName, deviceID) {
+        var _this = this;
+        this.http.setSensorName(deviceName, deviceID).subscribe(function (result) {
+            _this.router.navigateByUrl('/main');
+        });
+    };
+    SensorComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-sensor',
+            template: __webpack_require__(/*! ./sensor.component.html */ "./src/app/components/sensor/sensor.component.html"),
+            styles: [__webpack_require__(/*! ./sensor.component.css */ "./src/app/components/sensor/sensor.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
+    ], SensorComponent);
+    return SensorComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/models/user.ts":
+/*!********************************!*\
+  !*** ./src/app/models/user.ts ***!
+  \********************************/
+/*! exports provided: User */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "User", function() { return User; });
+var User = /** @class */ (function () {
+    function User() {
+    }
+    return User;
 }());
 
 
@@ -748,7 +826,6 @@ var AuthenticationService = /** @class */ (function () {
         this.toast = toast;
         // Check at every second if the token is valid
         setInterval(function () {
-            console.log('hola');
             if (!AuthenticationService_1.validToken() && router.url !== '/login') {
                 // Close the seasion
                 toast.errorToastr('Identify yourself again', 'Season token has expired');
@@ -811,15 +888,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./authentication.service */ "./src/app/service/authentication.service.ts");
+
 
 
 
 var HttpService = /** @class */ (function () {
+    //url = 'https://localhost';
     function HttpService(http) {
         this.http = http;
+        this.url = location.origin;
     }
     HttpService.prototype.login = function (user) {
-        return this.http.post(location.origin + '/login', user);
+        return this.http.post(this.url + '/login', user);
+    };
+    HttpService.prototype.setSensorName = function (name, id) {
+        var body = { deviceName: name, deviceID: id };
+        var token = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
+        return this.http.put(this.url + '/sensor', body, token);
     };
     HttpService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({ providedIn: 'root' }),
@@ -829,12 +915,6 @@ var HttpService = /** @class */ (function () {
 }());
 
 // HTTP response as plain text --> {responseType: 'text'}
-/*
-public getTable() {
-  let tokenHeader = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
-  return this.http.get<Sensor[]>('https://192.168.1.13' + '/sensor', tokenHeader)
-}
-*/
 
 
 /***/ }),
@@ -861,10 +941,12 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var SocketService = /** @class */ (function () {
+    //url = 'https://localhost';
     function SocketService() {
+        this.url = location.origin;
     }
     SocketService.prototype.openSocket = function () {
-        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(location.origin, { secure: true, path: '/sensor', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
+        this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(this.url, { secure: true, path: '/sensor/io', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
     };
     SocketService.prototype.updateTable = function () {
         var _this = this;

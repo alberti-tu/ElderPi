@@ -1,0 +1,31 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+  <h1>Sensor Manager</h1>
+
+  <form (ngSubmit)="sendName(deviceName.value, deviceID.value)">
+    <div class="row">
+      <div class="col-md-2">
+        <label>Device Name</label>
+      </div>
+      <div class="col">
+        <input #deviceName class="form-control">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-2">
+        <label>Device ID</label>
+      </div>
+      <div class="col">
+        <label>
+          <select #deviceID class="form-control">
+            <option *ngFor="let item of list" [value]="item.deviceID">{{item.deviceID}}</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <br>
+    <button type="submit" class="btn btn-success">Save</button>
+  </form>
+</div>

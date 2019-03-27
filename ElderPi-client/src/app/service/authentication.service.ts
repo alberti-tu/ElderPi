@@ -11,7 +11,6 @@ export class AuthenticationService implements CanActivate{
   constructor(private socket: SocketService, private router: Router, private toast: ToastrManager) {
     // Check at every second if the token is valid
     setInterval(function() {
-      console.log('hola');
       if(!AuthenticationService.validToken() && router.url !== '/login') {
         // Close the seasion
         toast.errorToastr('Identify yourself again', 'Season token has expired');

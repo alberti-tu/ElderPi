@@ -5,14 +5,12 @@ let io = '';
 // Obtain the parameters of the socket
 const getSocket = function getSocket(_io) {
     io = _io;
-
     // socket authentication middleware
     io.use((socket, next) => {
         let token = socket.handshake.query.authorization;
         if(auth.validateToken(token)) next();
         else console.error('This token is not valid');
     });
-
     updateClient();
 };
 
@@ -24,13 +22,23 @@ const updateSensor = function updateSensor(req, res, next) {
                 res.send(rows);
                 return next();
             }
-            mysql.querySQL('INSERT INTO sensors VALUES (?,?,?,NOW())', [req.body.deviceID, req.body.precense, req.body.battery])
+            mysql.querySQL('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())', [req.body.deviceID, req.body.precense, req.body.battery])
                 .then(rows => {
                     res.send(rows);
                     return next();
                 })
                 .catch(error => res.send(error.code));
-        } )
+        })
+        .catch(error => res.send(error.code) );
+};
+
+// Set a custom name for the device
+const updateNameDevice = function updateNameDevice(req, res, next) {
+    mysql.querySQL('UPDATE sensors SET deviceName = ? WHERE deviceID = ?', [req.body.deviceName, req.body.deviceID])
+        .then(rows => {
+            res.send(rows);
+            return next();
+        })
         .catch(error => res.send(error.code) );
 };
 
@@ -44,5 +52,6 @@ const updateClient = function updateClient() {
 module.exports = {
     getSocket: getSocket,
     updateSensor: updateSensor,
+    updateNameDevice: updateNameDevice,
     updateClient: updateClient
 };

@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">ElderPi</a>
+  <a class="navbar-brand" routerLink="/">ElderPi</a>
 
   <!-- Collapse Button -->
   <button class="navbar-toggler" type="button" (click)="toggleNavbar()">
@@ -10,7 +10,7 @@
   <div class="collapse navbar-collapse" [ngClass]="{'show': navbarOpen}">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item">
-        <a class="nav-link" href="#">Item 1</a>
+        <a class="nav-link" routerLink="/sensor">Sensor</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#">Item 2</a>

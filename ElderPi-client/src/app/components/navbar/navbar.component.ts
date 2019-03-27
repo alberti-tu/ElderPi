@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrManager } from 'ng6-toastr-notifications';
-import { AuthenticationService } from '../service/authentication.service';
-import { SocketService } from '../service/socket.service';
+import { AuthenticationService } from '../../service/authentication.service';
+import { SocketService } from '../../service/socket.service';
 
 @Component({
   selector: 'app-navbar',

@@ -6,17 +6,19 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ng6-toastr-notifications';
 
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { MainComponent } from './main/main.component';
+import { LoginComponent } from './components/login/login.component';
+import { MainComponent } from './components/main/main.component';
 import { AppRoutingModule } from './app-routing.module';
-import { NavbarComponent } from './navbar/navbar.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { SensorComponent } from './components/sensor/sensor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MainComponent,
-    NavbarComponent
+    NavbarComponent,
+    SensorComponent
   ],
   imports: [
     BrowserModule,

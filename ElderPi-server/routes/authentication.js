@@ -7,7 +7,8 @@ const secret = 'ElderPi';
 const createToken = function createToken(id) {
     let payload = {
         userID: id,
-        expiration: moment().add(1, "days").unix(),
+        //expiration: moment().add(1, "days").unix(),
+        expiration: moment().add(1, "day").unix()
     };
     return jwt.encode(payload, secret);
 };

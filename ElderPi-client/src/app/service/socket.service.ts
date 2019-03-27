@@ -8,10 +8,13 @@ export class SocketService {
 
   private socket;
 
+  url = location.origin;
+  //url = 'https://localhost';
+
   constructor() { }
 
   public openSocket() {
-    this.socket = io(location.origin, { secure: true,  path: '/sensor', query: {authorization: AuthenticationService.getToken()} });
+    this.socket = io(this.url, { secure: true,  path: '/sensor/io', query: {authorization: AuthenticationService.getToken()} });
   }
 
   public updateTable() {
