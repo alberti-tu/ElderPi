@@ -44,6 +44,7 @@ app.post('/login', user.login);
 
 app.post('/sensor', sensor.updateSensor, sensor.updateClient);
 app.put('/sensor', auth.getToken, sensor.updateNameDevice, sensor.updateClient);
+app.get('/sensor/history', auth.getToken, sensor.sensorHistory);
 
 // Socket events
 io.on('connection', (socket) => { sensor.getSocket(io) });

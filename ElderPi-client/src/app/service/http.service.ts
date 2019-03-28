@@ -20,6 +20,11 @@ export class HttpService {
     let token = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
     return this.http.put(this.url + '/sensor', body, token)
   }
+
+  public getHistory() {
+    let token = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
+    return this.http.get(this.url + '/sensor/history', token)
+  }
 }
 
 // HTTP response as plain text --> {responseType: 'text'}

@@ -21,6 +21,8 @@ async function createDatabase() {
     await connection.query('USE ElderPi');
     await connection.query('CREATE TABLE sensors (deviceName VARCHAR(24) DEFAULT NULL, deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, battery INT NOT NULL, timestamp DATETIME, UNIQUE KEY unique_user (deviceID))');
     await connection.query('USE ElderPi');
+    await connection.query('CREATE TABLE history (deviceName VARCHAR(24) DEFAULT NULL, deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, timestamp DATETIME)');
+    await connection.query('USE ElderPi');
     await connection.query('INSERT INTO users VALUES (?, ?)', ['admin', 'admin']);
     connection = await connection.end();
     console.log('Database created');

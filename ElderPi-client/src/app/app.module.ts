@@ -11,6 +11,7 @@ import { MainComponent } from './components/main/main.component';
 import { AppRoutingModule } from './app-routing.module';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { SensorComponent } from './components/sensor/sensor.component';
+import { HistoryComponent } from './components/history/history.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { SensorComponent } from './components/sensor/sensor.component';
     LoginComponent,
     MainComponent,
     NavbarComponent,
-    SensorComponent
+    SensorComponent,
+    HistoryComponent
   ],
   imports: [
     BrowserModule,
