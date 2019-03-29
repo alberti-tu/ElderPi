@@ -54,18 +54,13 @@ const updateSensor = function updateSensor(req, res, next) {
 const updateNameDevice = function updateNameDevice(req, res, next) {
     mysql.querySQL('UPDATE sensors SET deviceName = ? WHERE deviceID = ?', [req.body.deviceName, req.body.deviceID])
         .then(rows => {
-            res.send(rows);
-            return next();
-        })
-        .catch(error => { console.log(error); res.code(500) });
-};
-
-const insertHistory = function insertHistory(deviceID) {
-    mysql.querySQL('SELECT * FROM sensors WHERE deviceID = ?', [deviceID])
-        .then(rows => {
-            mysql.querySQL('INSERT INTO history VALUES (?,?,?,?)', [rows[0].deviceName, rows[0].deviceID, rows[0].precense, rows[0].timestamp])
+            mysql.querySQL('UPDATE history SET deviceName = ? WHERE deviceID = ?', [req.body.deviceName, req.body.deviceID])
+                .then(rows => {
+                    res.send(rows);
+                    return next();
+                })
                 .catch(error => { console.log(error); res.code(500) });
-        } )
+        })
         .catch(error => { console.log(error); res.code(500) });
 };
 
