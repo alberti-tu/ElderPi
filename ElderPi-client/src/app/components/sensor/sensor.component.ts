@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpService } from '../../service/http.service';
-import {Router} from '@angular/router';
-import {Sensor} from '../../models/sensor';
+import { SocketService } from '../../service/socket.service';
+import { Sensor } from '../../models/sensor';
 
 @Component({
   selector: 'app-sensor',
@@ -10,10 +11,11 @@ import {Sensor} from '../../models/sensor';
 })
 export class SensorComponent implements OnInit {
 
-  //list = [{ deviceID: '123' }, { deviceID: '1234' }, { deviceID: '490024001151373331333230' }];
-  list = [{ deviceID: '490024001151373331333230' }];
+  list: Sensor[];
 
-  constructor(private http: HttpService, private router: Router) { }
+  constructor(private http: HttpService, private socket: SocketService, private router: Router) {
+    this.list = this.socket.table;
+  }
 
   ngOnInit() { }
 

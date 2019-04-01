@@ -19,7 +19,7 @@ async function createDatabase() {
     await connection.query('USE ElderPi');
     await connection.query('CREATE TABLE users (username VARCHAR(64) NOT NULL, password VARCHAR(64) NOT NULL, UNIQUE KEY unique_user (username))');
     await connection.query('USE ElderPi');
-    await connection.query('CREATE TABLE sensors (deviceName VARCHAR(24) DEFAULT NULL, deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, battery INT NOT NULL, timestamp DATETIME, UNIQUE KEY unique_user (deviceID))');
+    await connection.query('CREATE TABLE sensors (deviceName VARCHAR(24) DEFAULT NULL, deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, battery INT NOT NULL, timestamp DATETIME, UNIQUE KEY unique_sensor (deviceID))');
     await connection.query('USE ElderPi');
     await connection.query('CREATE TABLE history (deviceName VARCHAR(24) DEFAULT NULL, deviceID VARCHAR(24) NOT NULL, precense BOOLEAN DEFAULT FALSE, timestamp DATETIME)');
     await connection.query('USE ElderPi');
@@ -33,15 +33,21 @@ async function createDatabase() {
     console.log('Database connected');
 }
 
-// Generic SQL query
-const querySQL = async function querySQL(sql, params = null) {
-    connection = await mariadb.createConnection({ user:'root', host: 'localhost', database: 'ElderPi' });
-    let result = await connection.query(sql, params);
-    connection = await connection.end();
-    return result;
+const query = async function query(sql, params = null) {
+    async function querrySQL(sql, params) {
+        connection = await mariadb.createConnection({ user:'root', host: 'localhost', database: 'ElderPi' });
+        let result = await connection.query(sql, params);
+        connection = await connection.end();
+
+        return result;
+    }
+
+    return await new Promise(resolve => {
+        resolve( querrySQL(sql, params) );
+    } );
 };
 
 module.exports = {
     connect: connect,
-    querySQL: querySQL
+    query: query
 };

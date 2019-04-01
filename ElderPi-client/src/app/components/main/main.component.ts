@@ -13,13 +13,13 @@ export class MainComponent implements OnInit {
   bodyTable: Sensor[];
 
   constructor(private socket: SocketService) {
+    this.bodyTable = this.socket.table;
     this.sensorData();
   }
 
   ngOnInit() {  }
 
   sensorData() {
-    this.socket.openSocket();
     this.socket.updateTable().subscribe((sensor: Sensor[]) => {
       this.bodyTable = sensor;
     });

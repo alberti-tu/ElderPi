@@ -570,7 +570,7 @@ module.exports = ".ng-valid[required] {\n  border-left: 5px solid #42A948;\n}\n\
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"container\">\n  <h1>Login</h1>\n  <form #form=\"ngForm\" (ngSubmit)=\"login()\">\n    <div class=\"form-group\">\n      <label for=\"username\">Username</label>\n      <input id=\"username\" name=\"username\" type=\"text\" class=\"form-control\" required [(ngModel)]=\"user.username\">\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"password\">Password</label>\n      <input id=\"password\" name=\"password\" type=\"password\" class=\"form-control\" required [(ngModel)]=\"user.password\">\n    </div>\n\n    <button type=\"submit\" class=\"btn btn-success\" [disabled]=\"!form.form.valid\">Sign In</button>\n  </form>\n</div>\n"
+module.exports = "<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Login</h1>\n  <form #form=\"ngForm\" (ngSubmit)=\"login()\">\n    <div class=\"form-group\">\n      <label for=\"username\">Username</label>\n      <input id=\"username\" name=\"username\" type=\"text\" class=\"form-control\" required [(ngModel)]=\"user.username\">\n    </div>\n\n    <div class=\"form-group\">\n      <label for=\"password\">Password</label>\n      <input id=\"password\" name=\"password\" type=\"password\" class=\"form-control\" required [(ngModel)]=\"user.password\">\n    </div>\n\n    <button type=\"submit\" class=\"btn btn-success\" [disabled]=\"!form.form.valid\">Sign In</button>\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -676,12 +676,12 @@ var MainComponent = /** @class */ (function () {
     function MainComponent(socket) {
         this.socket = socket;
         this.headTable = ['Location', 'Precense', 'Battery', 'Hour', 'Date'];
+        this.bodyTable = this.socket.table;
         this.sensorData();
     }
     MainComponent.prototype.ngOnInit = function () { };
     MainComponent.prototype.sensorData = function () {
         var _this = this;
-        this.socket.openSocket();
         this.socket.updateTable().subscribe(function (sensor) {
             _this.bodyTable = sensor;
         });
@@ -794,7 +794,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"sendName(deviceName.value, deviceID.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"sendName(deviceName.value, deviceID.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -810,18 +810,20 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SensorComponent", function() { return SensorComponent; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
-/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
+
 
 
 
 
 var SensorComponent = /** @class */ (function () {
-    function SensorComponent(http, router) {
+    function SensorComponent(http, socket, router) {
         this.http = http;
+        this.socket = socket;
         this.router = router;
-        //list = [{ deviceID: '123' }, { deviceID: '1234' }, { deviceID: '490024001151373331333230' }];
-        this.list = [{ deviceID: '490024001151373331333230' }];
+        this.list = this.socket.table;
     }
     SensorComponent.prototype.ngOnInit = function () { };
     SensorComponent.prototype.sendName = function (deviceName, deviceID) {
@@ -836,7 +838,7 @@ var SensorComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./sensor.component.html */ "./src/app/components/sensor/sensor.component.html"),
             styles: [__webpack_require__(/*! ./sensor.component.css */ "./src/app/components/sensor/sensor.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"], _angular_router__WEBPACK_IMPORTED_MODULE_3__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_3__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_4__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
     ], SensorComponent);
     return SensorComponent;
 }());
@@ -1020,14 +1022,15 @@ var SocketService = /** @class */ (function () {
     //url = 'https://localhost';
     function SocketService() {
         this.url = location.origin;
-    }
-    SocketService.prototype.openSocket = function () {
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(this.url, { secure: true, path: '/sensor/io', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
-    };
+    }
     SocketService.prototype.updateTable = function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
-            _this.socket.on('updateTable', function (message) { observer.next(message); });
+            _this.socket.on('updateTable', function (message) {
+                observer.next(message);
+                _this.table = message;
+            });
         });
     };
     SocketService.prototype.closeSocket = function () {

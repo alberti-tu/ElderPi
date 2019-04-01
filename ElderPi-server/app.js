@@ -28,6 +28,7 @@ app.use(cookieParser());
 const auth = require('./routes/authentication');
 const user = require('./routes/user');
 const sensor = require('./routes/sensor');
+const socketIO = require('./routes/socket');
 const network = require('./network/network');
 
 // Redirect the traffic HTTP to HTTPS and keep the traffic HTTP of the WSN
@@ -42,12 +43,12 @@ app.use(function(req, res, next) {
 // Backend routes
 app.post('/login', user.login);
 
-app.post('/sensor', sensor.updateSensor, sensor.updateClient);
-app.put('/sensor', auth.getToken, sensor.updateNameDevice, sensor.updateClient);
-app.get('/sensor/history', auth.getToken, sensor.sensorHistory);
+app.post('/sensor', sensor.updateSensor, sensor.insertSensor, sensor.updateHistory);
+app.put('/sensor', auth.getToken, sensor.updateNameDevice);
+app.get('/sensor/history', auth.getToken, sensor.getHistory);
 
 // Socket events
-io.on('connection', (socket) => { sensor.getSocket(io) });
+io.on('connection', (socket) => { socketIO.getSocket(io, socket) });
 
 // Frontend routes
 const allowedExt = ['.js', '.ico', '.css', '.png', '.jpg', '.woff2', '.woff', '.ttf', '.svg'];

@@ -1,86 +1,58 @@
 const mysql = require('../database/mysql');
-const auth = require('./authentication');
-let io = '';
+const socketIO = require('./socket');
 
-// Obtain the parameters of the socket
-const getSocket = function getSocket(_io) {
-    io = _io;
-    // socket authentication middleware
-    io.use((socket, next) => {
-        let token = socket.handshake.query.authorization;
-        if(auth.validateToken(token)) next();
-        else console.error('This token is not valid');
-    });
-    updateClient();
+// Obtain the complete History of sensor logs
+const getHistory = async function getHistory(req, res) {
+    return res.send( await mysql.query('SELECT * FROM history ORDER BY timestamp DESC') );
+};
+
+const insertSensor = async function insertSensor(req, res, next) {
+    if(!res.locals.isInserted) {
+        await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())',
+            [req.body.deviceID, req.body.precense, req.body.battery]);
+    }
+
+    next(); // Go to update History
 };
 
 // Update the sensor data or inserts a new row
-const updateSensor = function updateSensor(req, res, next) {
-    mysql.querySQL('UPDATE sensors SET precense = ?, battery = ?, timestamp = NOW() WHERE deviceID = ?', [req.body.precense, req.body.battery, req.body.deviceID])
-        .then(rows => {
-            if(rows.affectedRows !== 0) {
-                //insertHistory(req.body.deviceID);
-                mysql.querySQL('SELECT * FROM sensors WHERE deviceID = ?', [req.body.deviceID])
-                    .then(rows => {
-                        mysql.querySQL('INSERT INTO history VALUES (?,?,?,?)', [rows[0].deviceName, rows[0].deviceID, rows[0].precense, rows[0].timestamp])
-                            .then(rows => {
-                                res.send(rows);
-                                return next();
-                            })
-                            .catch(error => { console.log(error); res.code(500) });
-                    } )
-                    .catch(error => { console.log(error); res.code(500) });
-            }
-            mysql.querySQL('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())', [req.body.deviceID, req.body.precense, req.body.battery])
-                .then(rows => {
-                    //insertHistory(req.body.deviceID);
-                    mysql.querySQL('SELECT * FROM sensors WHERE deviceID = ?', [req.body.deviceID])
-                        .then(rows => {
-                            mysql.querySQL('INSERT INTO history VALUES (?,?,?,?)', [rows[0].deviceName, rows[0].deviceID, rows[0].precense, rows[0].timestamp])
-                                .then(rows => {
-                                    res.send(rows);
-                                    return next();
-                                })
-                                .catch(error => { console.log(error); res.code(500) });
-                        } )
-                        .catch(error => { console.log(error); res.code(500) });
-                })
-                .catch(error => { console.log(error); res.code(500) });
-        })
-        .catch(error => { console.log(error); res.code(500) });
+const updateSensor = async function updateSensor(req, res, next) {
+    res.end();  // Close the connection with the sensor
+
+    let result = await mysql.query('UPDATE sensors SET precense = ?, battery = ?, timestamp = NOW() WHERE deviceID = ?',
+        [req.body.precense, req.body.battery, req.body.deviceID]);
+
+    res.locals.isInserted = result.affectedRows;
+    next(); // Go to insert Sensor
+};
+
+// Insert the sensor log into History
+const updateHistory = async function updateHistory(req, res) {
+    let deviceName = await mysql.query('SELECT deviceName FROM sensors WHERE deviceID = ?', [req.body.deviceID]);
+    await mysql.query('INSERT INTO history VALUES (?,?,?,NOW())',
+        [deviceName[0].deviceName || null, req.body.deviceID, req.body.precense, req.body.battery]);
+    socketIO.updateClient();
 };
 
 // Set a custom name for the device
-const updateNameDevice = function updateNameDevice(req, res, next) {
-    mysql.querySQL('UPDATE sensors SET deviceName = ? WHERE deviceID = ?', [req.body.deviceName, req.body.deviceID])
-        .then(rows => {
-            mysql.querySQL('UPDATE history SET deviceName = ? WHERE deviceID = ?', [req.body.deviceName, req.body.deviceID])
-                .then(rows => {
-                    res.send(rows);
-                    return next();
-                })
-                .catch(error => { console.log(error); res.code(500) });
-        })
-        .catch(error => { console.log(error); res.code(500) });
-};
+const updateNameDevice = async function updateNameDevice(req, res) {
+    // Update the deviceName in sensor table
+    await mysql.query('UPDATE sensors SET deviceName = ? WHERE deviceID = ?',
+        [req.body.deviceName, req.body.deviceID]);
 
-const sensorHistory = function sensorHistory(req, res) {
-    mysql.querySQL('SELECT * FROM history ORDER BY timestamp DESC')
-        .then(rows => res.send(rows) )
-        .catch(error => { console.log(error); res.code(500) });
-};
+    // Update the deviceName in history table
+    await mysql.query('UPDATE history SET deviceName = ? WHERE deviceID = ?',
+        [req.body.deviceName, req.body.deviceID]);
 
-// Send the mysql sensor table through web socket
-const updateClient = function updateClient() {
-    mysql.querySQL('SELECT * FROM sensors ORDER BY timestamp DESC')
-        .then(rows => io.emit('updateTable', rows))
-        .catch(error => { console.log(error); res.code(500) });
+    res.end();
+
+    socketIO.updateClient();
 };
 
 module.exports = {
-    getSocket: getSocket,
-    sensorHistory: sensorHistory,
+    getHistory: getHistory,
+    insertSensor: insertSensor,
     updateSensor: updateSensor,
-    updateNameDevice: updateNameDevice,
-    updateClient: updateClient
+    updateHistory: updateHistory,
+    updateNameDevice: updateNameDevice
 };
