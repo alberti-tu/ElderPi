@@ -1028,8 +1028,8 @@ var SocketService = /** @class */ (function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
             _this.socket.on('updateTable', function (message) {
-                observer.next(message);
                 _this.table = message;
+                observer.next(message);
             });
         });
     };

@@ -20,8 +20,8 @@ export class SocketService {
   public updateTable() {
     return new Observable(observer => {
       this.socket.on('updateTable', message => {
-        observer.next(message);
         this.table = message;
+        observer.next(message);
       });
     });
   }
