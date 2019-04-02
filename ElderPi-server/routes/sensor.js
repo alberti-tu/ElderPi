@@ -8,8 +8,8 @@ const getHistory = async function getHistory(req, res) {
 
 const insertSensor = async function insertSensor(req, res, next) {
     if(!res.locals.isInserted) {
-        await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())',
-            [req.body.deviceID, req.body.precense, req.body.battery]);
+        await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,NOW())',
+            [req.body.deviceID, req.body.battery]);
     }
 
     next(); // Go to update History
@@ -19,8 +19,8 @@ const insertSensor = async function insertSensor(req, res, next) {
 const updateSensor = async function updateSensor(req, res, next) {
     res.end();  // Close the connection with the sensor
 
-    let result = await mysql.query('UPDATE sensors SET precense = ?, battery = ?, timestamp = NOW() WHERE deviceID = ?',
-        [req.body.precense, req.body.battery, req.body.deviceID]);
+    let result = await mysql.query('UPDATE sensors SET battery = ?, timestamp = NOW() WHERE deviceID = ?',
+        [req.body.battery, req.body.deviceID]);
 
     res.locals.isInserted = result.affectedRows;
     next(); // Go to insert Sensor
@@ -28,9 +28,37 @@ const updateSensor = async function updateSensor(req, res, next) {
 
 // Insert the sensor log into History
 const updateHistory = async function updateHistory(req, res) {
-    let deviceName = await mysql.query('SELECT deviceName FROM sensors WHERE deviceID = ?', [req.body.deviceID]);
-    await mysql.query('INSERT INTO history VALUES (?,?,?,NOW())',
-        [deviceName[0].deviceName || null, req.body.deviceID, req.body.precense, req.body.battery]);
+    // Get the deviceName of the sensor
+    let sensor = await mysql.query('SELECT deviceName FROM sensors WHERE deviceID = ?', [req.body.deviceID]);
+
+    let lastSensor;
+    try {
+        // Get the deviceID of the last insert
+        lastSensor = await mysql.query('SELECT deviceID FROM history ORDER BY timestamp DESC LIMIT 1');
+        lastSensor = lastSensor[0].deviceID;
+    } catch (error) {
+        lastSensor = '';
+    }
+
+    // Insert if there're not any row in the table
+    if(lastSensor === '') {
+        // Insert a new row into history table with a custom name (if exists)
+        await mysql.query('INSERT INTO history VALUES (?,?,?,NOW())',
+            [sensor[0].deviceName || null, req.body.deviceID, 0]);
+    }
+
+    // Insert if the last ID is different
+    else if(req.body.deviceID !== lastSensor) {
+        // Update the duration in ms of the last location
+        await mysql.query('UPDATE history SET duration = ? WHERE deviceID = ? ORDER BY timestamp DESC LIMIT 1',
+            [5, lastSensor]);
+            //TODO: el 5 se tiene que cambiar por la diferencia de tiempo (ms)
+            //new Date().getTime() - new Date(self.getTable()[0].timestamp).getTime()
+        // Insert a new row into history table with a custom name (if exists)
+        await mysql.query('INSERT INTO history VALUES (?,?,?,NOW())',
+            [sensor[0].deviceName || null, req.body.deviceID, 0]);
+    }
+
     socketIO.updateClient();
 };
 

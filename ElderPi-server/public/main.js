@@ -501,7 +501,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.precense ? 'Yes' : 'No'}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.duration }}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -527,7 +527,7 @@ var HistoryComponent = /** @class */ (function () {
     function HistoryComponent(http, socket) {
         this.http = http;
         this.socket = socket;
-        this.headTable = ['Location', 'Precense', 'Hour', 'Date'];
+        this.headTable = ['Location', 'Duration', 'Hour', 'Date'];
         this.getHistory();
     }
     HistoryComponent.prototype.ngOnInit = function () { };
@@ -652,7 +652,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.precense ? 'Yes' : 'No'}}</td>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of getTable()\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n      <td>{{item.battery}}%</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -675,16 +675,22 @@ __webpack_require__.r(__webpack_exports__);
 var MainComponent = /** @class */ (function () {
     function MainComponent(socket) {
         this.socket = socket;
-        this.headTable = ['Location', 'Precense', 'Battery', 'Hour', 'Date'];
-        this.bodyTable = this.socket.table;
+        this.headTable = ['Location', 'Hour', 'Date', 'Battery'];
+        this.setTable(socket.table);
         this.sensorData();
     }
     MainComponent.prototype.ngOnInit = function () { };
     MainComponent.prototype.sensorData = function () {
         var _this = this;
-        this.socket.updateTable().subscribe(function (sensor) {
-            _this.bodyTable = sensor;
+        this.socket.updateTable().subscribe(function (sensors) {
+            _this.setTable(sensors);
         });
+    };
+    MainComponent.prototype.setTable = function (sensors) {
+        this.bodyTable = sensors;
+    };
+    MainComponent.prototype.getTable = function () {
+        return this.bodyTable;
     };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -898,22 +904,22 @@ var AuthenticationService = /** @class */ (function () {
         this.socket = socket;
         this.router = router;
         this.toast = toast;
+        this.intervalID = [];
         // Check at every second if the token is valid
-        setInterval(function () {
-            if (!AuthenticationService_1.validToken() && router.url !== '/login') {
-                // Close the seasion
+        var self = this;
+        var id = setInterval(function () {
+            if (!AuthenticationService_1.validToken()) {
                 toast.errorToastr('Identify yourself again', 'Season token has expired');
-                localStorage.clear();
-                socket.closeSocket();
-                router.navigateByUrl('/login');
+                self.logout();
             }
         }, 1000);
+        this.setIntervalID(id);
     }
     AuthenticationService_1 = AuthenticationService;
     AuthenticationService.prototype.canActivate = function () {
         if (AuthenticationService_1.validToken())
             return true;
-        this.router.navigateByUrl('/login');
+        this.logout();
         return false;
     };
     AuthenticationService.setToken = function (token) {
@@ -931,11 +937,20 @@ var AuthenticationService = /** @class */ (function () {
             return null;
         return token.expiration > moment__WEBPACK_IMPORTED_MODULE_6__().unix();
     };
+    AuthenticationService.prototype.setIntervalID = function (id) {
+        this.intervalID.push(id);
+    };
+    AuthenticationService.prototype.clearIntervalID = function () {
+        for (var i = 0; i < this.intervalID.length; i++) {
+            clearInterval(this.intervalID[i]);
+        }
+    };
     // Close the seasson
     AuthenticationService.prototype.logout = function () {
         localStorage.clear();
         this.socket.closeSocket();
         this.router.navigateByUrl('/login');
+        this.clearIntervalID();
     };
     var AuthenticationService_1;
     AuthenticationService = AuthenticationService_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([

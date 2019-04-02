@@ -10,7 +10,7 @@ import { Sensor } from '../../models/sensor';
 })
 export class HistoryComponent implements OnInit {
 
-  headTable: string[] = ['Location', 'Precense', 'Hour', 'Date'];
+  headTable: string[] = ['Location', 'Duration', 'Hour', 'Date'];
   bodyTable: Sensor[];
 
   constructor(private http: HttpService, private socket: SocketService) {

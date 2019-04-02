@@ -8,23 +8,25 @@ import * as moment from 'moment';
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{
 
+  intervalID: number[] = [];
+
   constructor(private socket: SocketService, private router: Router, private toast: ToastrManager) {
     // Check at every second if the token is valid
-    setInterval(function() {
-      if(!AuthenticationService.validToken() && router.url !== '/login') {
-        // Close the seasion
+    let self = this;
+    let id = setInterval(function() {
+      if(!AuthenticationService.validToken()) {
         toast.errorToastr('Identify yourself again', 'Season token has expired');
-        localStorage.clear();
-        socket.closeSocket();
-        router.navigateByUrl('/login');
+        self.logout();
       }
     },1000);
+
+    this.setIntervalID(id);
   }
 
   canActivate() {
     if (AuthenticationService.validToken()) return true;
 
-    this.router.navigateByUrl('/login');
+    this.logout();
     return false;
   }
 
@@ -46,10 +48,21 @@ export class AuthenticationService implements CanActivate{
     return token.expiration > moment().unix();
   }
 
+  public setIntervalID(id: number): void {
+    this.intervalID.push(id);
+  }
+
+  public clearIntervalID(): void {
+    for(let i = 0; i < this.intervalID.length; i++) {
+      clearInterval(this.intervalID[i]);
+    }
+  }
+
   // Close the seasson
   logout(): void {
     localStorage.clear();
     this.socket.closeSocket();
     this.router.navigateByUrl('/login');
+    this.clearIntervalID();
   }
 }

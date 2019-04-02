@@ -31,6 +31,13 @@ const sensor = require('./routes/sensor');
 const socketIO = require('./routes/socket');
 const network = require('./network/network');
 
+//Log the request
+app.use(function (req, res, next) {
+    let ip_req = req.connection.remoteAddress.split('::ffff:')[1] || 'localhost';
+    console.log(new Date().toLocaleString() + ' || ' + ip_req || 'localhost');
+    next();
+});
+
 // Redirect the traffic HTTP to HTTPS and keep the traffic HTTP of the WSN
 network.interfaces('wlan0');
 app.use(function(req, res, next) {

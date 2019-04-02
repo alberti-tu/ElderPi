@@ -18,8 +18,11 @@ const getSocket = function getSocket(_io, _socket) {
 
 // Send the mysql sensor table through web socket
 const updateClient = async function updateClient() {
-    let result = await mysql.query('SELECT * FROM sensors ORDER BY timestamp DESC');
-    io.emit('updateTable', result);
+    try {
+        let result = await mysql.query('SELECT * FROM sensors ORDER BY timestamp DESC');
+        io.emit('updateTable', result);
+    }
+    catch (error) { }   // There're not users connected
 };
 
 module.exports = {
