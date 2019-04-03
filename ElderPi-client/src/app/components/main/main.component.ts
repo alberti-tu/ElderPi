@@ -9,7 +9,7 @@ import { Sensor } from '../../models/sensor';
 })
 export class MainComponent implements OnInit {
 
-  headTable: string[] = ['Location', 'Hour', 'Date', 'Battery'];
+  headTable: string[] = ['Location', 'Battery', 'Hour', 'Date'];
   bodyTable: Sensor[];
 
   constructor(private socket: SocketService) {

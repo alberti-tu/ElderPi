@@ -501,7 +501,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.duration }}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.time}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -534,8 +534,24 @@ var HistoryComponent = /** @class */ (function () {
     HistoryComponent.prototype.getHistory = function () {
         var _this = this;
         this.http.getHistory().subscribe(function (sensor) {
+            for (var i = 0; i < sensor.length; i++) {
+                sensor[i].time = _this.time(sensor[i].duration);
+            }
             _this.bodyTable = sensor;
         });
+    };
+    HistoryComponent.prototype.time = function (duraion) {
+        var myDate = new Date(duraion);
+        var days = '', hours = '', min = '', sec = '-';
+        if (duraion >= 1000)
+            sec = myDate.getUTCSeconds().toString() + ' sec ';
+        if (duraion >= 60000)
+            min = myDate.getUTCMinutes().toString() + ' min ';
+        if (duraion >= 3600000)
+            hours = myDate.getUTCHours().toString() + ' h ';
+        if (duraion >= 86400000)
+            days = Math.trunc(duraion / 86400000) + ' days ';
+        return days + hours + min + sec;
     };
     HistoryComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -652,7 +668,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of getTable()\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n      <td>{{item.battery}}%</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of getTable()\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -675,7 +691,7 @@ __webpack_require__.r(__webpack_exports__);
 var MainComponent = /** @class */ (function () {
     function MainComponent(socket) {
         this.socket = socket;
-        this.headTable = ['Location', 'Hour', 'Date', 'Battery'];
+        this.headTable = ['Location', 'Battery', 'Hour', 'Date'];
         this.setTable(socket.table);
         this.sensorData();
     }
