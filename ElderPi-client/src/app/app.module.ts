@@ -13,6 +13,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SensorComponent } from './components/sensor/sensor.component';
 import { HistoryComponent } from './components/history/history.component';
 
+import { ChartsModule } from 'ng2-charts'
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,6 +30,7 @@ import { HistoryComponent } from './components/history/history.component';
     FormsModule,
     HttpClientModule,
     ToastrModule.forRoot(),
+    ChartsModule,
     AppRoutingModule
   ],
   providers: [],

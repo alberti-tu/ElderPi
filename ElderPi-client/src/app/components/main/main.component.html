@@ -6,7 +6,7 @@
       <tr><th scope="col" *ngFor="let column of headTable">{{column}}</th></tr>
     </thead>
   <tbody class="text-center">
-    <tr *ngFor="let item of getTable()">
+    <tr *ngFor="let item of list">
       <th scope="row">{{item.deviceName || item.deviceID}}</th>
       <td>{{item.battery}}%</td>
       <td>{{item.timestamp | date:"HH:mm:ss" }}</td>

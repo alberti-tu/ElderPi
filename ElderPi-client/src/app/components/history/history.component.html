@@ -15,3 +15,14 @@
     </tbody>
   </table>
 </div>
+
+<div class="container" style="padding-bottom: 40px">
+  <canvas baseChart
+    [chartType]="'bar'"
+    [datasets]="yAxis"
+    [labels]="xAxis"
+    [legend] = "false"
+    [options]="{responsive: true}"
+    [colors]="[{backgroundColor: 'rgba(30, 169, 224, 0.8)'}]">
+  </canvas>
+</div>

@@ -13,7 +13,10 @@ const getSocket = function getSocket(_io, _socket) {
         else console.error('This token is not valid');
     });
 
-    updateClient();
+    // Send the sensor table
+    _socket.on('getTable', () => {
+        updateClient()
+    });
 };
 
 // Send the mysql sensor table through web socket

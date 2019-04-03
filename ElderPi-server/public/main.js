@@ -437,6 +437,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/navbar/navbar.component */ "./src/app/components/navbar/navbar.component.ts");
 /* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
 /* harmony import */ var _components_history_history_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/history/history.component */ "./src/app/components/history/history.component.ts");
+/* harmony import */ var ng2_charts__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ng2-charts */ "./node_modules/ng2-charts/fesm5/ng2-charts.js");
+
 
 
 
@@ -470,6 +472,7 @@ var AppModule = /** @class */ (function () {
                 _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_5__["HttpClientModule"],
                 ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_6__["ToastrModule"].forRoot(),
+                ng2_charts__WEBPACK_IMPORTED_MODULE_14__["ChartsModule"],
                 _app_routing_module__WEBPACK_IMPORTED_MODULE_10__["AppRoutingModule"]
             ],
             providers: [],
@@ -501,7 +504,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.time}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.time}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n<div class=\"container\" style=\"padding-bottom: 40px\">\n  <canvas baseChart\n    [chartType]=\"'bar'\"\n    [datasets]=\"yAxis\"\n    [labels]=\"xAxis\"\n    [legend] = \"false\"\n    [options]=\"{responsive: true}\"\n    [colors]=\"[{backgroundColor: 'rgba(30, 169, 224, 0.8)'}]\">\n  </canvas>\n</div>\n"
 
 /***/ }),
 
@@ -518,48 +521,89 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
-/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
-
 
 
 
 var HistoryComponent = /** @class */ (function () {
-    function HistoryComponent(http, socket) {
+    function HistoryComponent(http) {
         this.http = http;
-        this.socket = socket;
         this.headTable = ['Location', 'Duration', 'Hour', 'Date'];
+        this.xAxis = [''];
+        this.yAxis = [{ label: '', data: [0] }];
+        this.showChart = false;
         this.getHistory();
     }
+    HistoryComponent_1 = HistoryComponent;
     HistoryComponent.prototype.ngOnInit = function () { };
     HistoryComponent.prototype.getHistory = function () {
         var _this = this;
         this.http.getHistory().subscribe(function (sensor) {
-            for (var i = 0; i < sensor.length; i++) {
-                sensor[i].time = _this.time(sensor[i].duration);
+            if (sensor.length !== 0) {
+                sensor[0].duration = new Date().getTime() - new Date(sensor[0].timestamp).getTime();
+                sensor[0].time = HistoryComponent_1.time(new Date().getTime() - new Date(sensor[0].timestamp).getTime());
+                for (var i = 1; i < sensor.length; i++) {
+                    sensor[i].time = HistoryComponent_1.time(sensor[i].duration);
+                }
+                _this.bodyTable = sensor;
+                _this.graph(sensor);
             }
-            _this.bodyTable = sensor;
         });
     };
-    HistoryComponent.prototype.time = function (duraion) {
-        var myDate = new Date(duraion);
-        var days = '', hours = '', min = '', sec = '-';
-        if (duraion >= 1000)
+    HistoryComponent.prototype.graph = function (device) {
+        var sum = 0;
+        var value = [];
+        // Sum of all ms of each sensor
+        for (var i = 0; i < device.length; i++) {
+            sum = sum + device[i].duration;
+        }
+        // Process the data
+        for (var i = 0; i < device.length; i++) {
+            for (var j = 0; j < device.length; j++) {
+                var found = false;
+                for (var k = 0; k < value.length; k++) {
+                    if (device[i].deviceID === value[k].deviceID)
+                        found = true;
+                }
+                if ((device[i].deviceID === device[j].deviceID) && (found == false)) {
+                    value.push({ deviceName: device[i].deviceName, deviceID: device[i].deviceID, duration: 0 }); // unique Device ID
+                    // Percentage of precense in each device
+                    for (var l = 0; l < device.length; l++) {
+                        if (value[i].deviceID === device[l].deviceID)
+                            value[i].duration = value[i].duration + Math.round(device[l].duration / sum * 100);
+                    }
+                }
+            }
+        }
+        this.xAxis = value.map(function (item) { return item.deviceName || item.deviceID; });
+        this.yAxis = [{ label: 'Time (%)', data: value.map(function (item) { return item.duration; }) }];
+        //this.yAxis = { label: 'test', data: value.map(item => { return item.duration }) };
+        console.log(value.map(function (item) { return item.deviceName || item.deviceID; }));
+        console.log(value.map(function (item) { return item.duration; }));
+        console.log(value);
+        console.log('sum: ' + sum);
+        this.showChart = true;
+    };
+    HistoryComponent.time = function (duration) {
+        var myDate = new Date(duration);
+        var days = '', hours = '', min = '', sec = '';
+        if (duration >= 1000)
             sec = myDate.getUTCSeconds().toString() + ' sec ';
-        if (duraion >= 60000)
+        if (duration >= 60000)
             min = myDate.getUTCMinutes().toString() + ' min ';
-        if (duraion >= 3600000)
+        if (duration >= 3600000)
             hours = myDate.getUTCHours().toString() + ' h ';
-        if (duraion >= 86400000)
-            days = Math.trunc(duraion / 86400000) + ' days ';
+        if (duration >= 86400000)
+            days = Math.trunc(duration / 86400000) + ' days ';
         return days + hours + min + sec;
     };
-    HistoryComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    var HistoryComponent_1;
+    HistoryComponent = HistoryComponent_1 = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-history',
             template: __webpack_require__(/*! ./history.component.html */ "./src/app/components/history/history.component.html"),
             styles: [__webpack_require__(/*! ./history.component.css */ "./src/app/components/history/history.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_3__["SocketService"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_2__["HttpService"]])
     ], HistoryComponent);
     return HistoryComponent;
 }());
@@ -668,7 +712,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of getTable()\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n      <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n  <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of list\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.battery}}%</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n"
 
 /***/ }),
 
@@ -690,24 +734,15 @@ __webpack_require__.r(__webpack_exports__);
 
 var MainComponent = /** @class */ (function () {
     function MainComponent(socket) {
+        var _this = this;
         this.socket = socket;
         this.headTable = ['Location', 'Battery', 'Hour', 'Date'];
-        this.setTable(socket.table);
-        this.sensorData();
+        this.socket.getTable();
+        this.socket.updateTable().subscribe(function (sensors) {
+            _this.list = sensors;
+        });
     }
     MainComponent.prototype.ngOnInit = function () { };
-    MainComponent.prototype.sensorData = function () {
-        var _this = this;
-        this.socket.updateTable().subscribe(function (sensors) {
-            _this.setTable(sensors);
-        });
-    };
-    MainComponent.prototype.setTable = function (sensors) {
-        this.bodyTable = sensors;
-    };
-    MainComponent.prototype.getTable = function () {
-        return this.bodyTable;
-    };
     MainComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
             selector: 'app-main',
@@ -842,10 +877,14 @@ __webpack_require__.r(__webpack_exports__);
 
 var SensorComponent = /** @class */ (function () {
     function SensorComponent(http, socket, router) {
+        var _this = this;
         this.http = http;
         this.socket = socket;
         this.router = router;
-        this.list = this.socket.table;
+        this.socket.getTable();
+        this.socket.updateTable().subscribe(function (sensors) {
+            _this.list = sensors;
+        });
     }
     SensorComponent.prototype.ngOnInit = function () { };
     SensorComponent.prototype.sendName = function (deviceName, deviceID) {
@@ -1055,6 +1094,9 @@ var SocketService = /** @class */ (function () {
         this.url = location.origin;
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(this.url, { secure: true, path: '/sensor/io', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
     }
+    SocketService.prototype.getTable = function () {
+        this.socket.emit('getTable');
+    };
     SocketService.prototype.updateTable = function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {

@@ -10,26 +10,15 @@ import { Sensor } from '../../models/sensor';
 export class MainComponent implements OnInit {
 
   headTable: string[] = ['Location', 'Battery', 'Hour', 'Date'];
-  bodyTable: Sensor[];
+  list: Sensor[];
 
   constructor(private socket: SocketService) {
-    this.setTable(socket.table);
-    this.sensorData();
+    this.socket.getTable();
+    this.socket.updateTable().subscribe((sensors: Sensor[]) => {
+      this.list = sensors;
+    });
   }
 
   ngOnInit() {  }
 
-  sensorData() {
-    this.socket.updateTable().subscribe((sensors: Sensor[]) => {
-      this.setTable(sensors);
-    });
-  }
-
-  setTable(sensors: Sensor[]): void {
-    this.bodyTable = sensors;
-  }
-
-  getTable(): Sensor[] {
-    return this.bodyTable;
-  }
 }

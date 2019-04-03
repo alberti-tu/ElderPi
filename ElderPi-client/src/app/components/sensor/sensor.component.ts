@@ -14,7 +14,10 @@ export class SensorComponent implements OnInit {
   list: Sensor[];
 
   constructor(private http: HttpService, private socket: SocketService, private router: Router) {
-    this.list = this.socket.table;
+    this.socket.getTable();
+    this.socket.updateTable().subscribe((sensors: Sensor[]) => {
+      this.list = sensors;
+    });
   }
 
   ngOnInit() { }

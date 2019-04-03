@@ -17,6 +17,11 @@ export class SocketService {
     this.socket = io(this.url, { secure: true,  path: '/sensor/io', query: {authorization: AuthenticationService.getToken()} });
   }
 
+  public getTable() {
+    this.socket.emit('getTable');
+  }
+
+
   public updateTable() {
     return new Observable(observer => {
       this.socket.on('updateTable', message => {
