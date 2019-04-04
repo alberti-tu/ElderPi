@@ -11,6 +11,8 @@ export class HistoryComponent implements OnInit {
 
   headTable: string[] = ['Location', 'Duration', 'Hour', 'Date'];
   bodyTable: Sensor[];
+
+  // Type of Charts: bar, line, radar, pie, doughnut, polarArea, horizontalBar
   xAxis = [''];
   yAxis = [{ label: '', data: [0] }];
 
@@ -68,13 +70,6 @@ export class HistoryComponent implements OnInit {
 
     this.xAxis = value.map(item => { return item.deviceName || item.deviceID });
     this.yAxis = [{ label: 'Time (%)', data: value.map(item => { return item.duration }) }];
-    //this.yAxis = { label: 'test', data: value.map(item => { return item.duration }) };
-
-    console.log(value.map(item => { return item.deviceName || item.deviceID }));
-    console.log(value.map(item => { return item.duration }));
-
-    console.log(value);
-    console.log('sum: ' + sum);
 
     this.showChart = true;
   }

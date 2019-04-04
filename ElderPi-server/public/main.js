@@ -504,7 +504,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.time}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n<div class=\"container\" style=\"padding-bottom: 40px\">\n  <canvas baseChart\n    [chartType]=\"'bar'\"\n    [datasets]=\"yAxis\"\n    [labels]=\"xAxis\"\n    [legend] = \"false\"\n    [options]=\"{responsive: true}\"\n    [colors]=\"[{backgroundColor: 'rgba(30, 169, 224, 0.8)'}]\">\n  </canvas>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"table-responsive\">\n  <table class=\"table table-bordered table-hover\">\n    <thead class=\"thead-dark text-center\">\n    <tr><th scope=\"col\" *ngFor=\"let column of headTable\">{{column}}</th></tr>\n    </thead>\n    <tbody class=\"text-center\">\n    <tr *ngFor=\"let item of bodyTable\">\n      <th scope=\"row\">{{item.deviceName || item.deviceID}}</th>\n      <td>{{item.time}}</td>\n      <td>{{item.timestamp | date:\"HH:mm:ss\" }}</td>\n      <td>{{item.timestamp | date:\"dd/MM/yyyy\" }}</td>\n    </tr>\n    </tbody>\n  </table>\n</div>\n\n<div class=\"container\" style=\"padding-bottom: 40px\" *ngIf=\"showChart\">\n  <canvas baseChart\n          [chartType]=\"'bar'\"\n          [datasets]=\"yAxis\"\n          [labels]=\"xAxis\"\n          [legend] = \"false\"\n          [options]=\"{responsive: true}\"\n          [colors]=\"[{backgroundColor: 'rgba(52, 58, 64, 0.8)'}]\">\n  </canvas>\n</div>\n\n<!-- [{backgroundColor: 'rgba(30, 169, 224, 0.8)'}] -->\n"
 
 /***/ }),
 
@@ -528,6 +528,7 @@ var HistoryComponent = /** @class */ (function () {
     function HistoryComponent(http) {
         this.http = http;
         this.headTable = ['Location', 'Duration', 'Hour', 'Date'];
+        // Type of Charts: bar, line, radar, pie, doughnut, polarArea, horizontalBar
         this.xAxis = [''];
         this.yAxis = [{ label: '', data: [0] }];
         this.showChart = false;
@@ -576,11 +577,6 @@ var HistoryComponent = /** @class */ (function () {
         }
         this.xAxis = value.map(function (item) { return item.deviceName || item.deviceID; });
         this.yAxis = [{ label: 'Time (%)', data: value.map(function (item) { return item.duration; }) }];
-        //this.yAxis = { label: 'test', data: value.map(item => { return item.duration }) };
-        console.log(value.map(function (item) { return item.deviceName || item.deviceID; }));
-        console.log(value.map(function (item) { return item.duration; }));
-        console.log(value);
-        console.log('sum: ' + sum);
         this.showChart = true;
     };
     HistoryComponent.time = function (duration) {
@@ -956,6 +952,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var AuthenticationService = /** @class */ (function () {
     function AuthenticationService(socket, router, toast) {
+        var _this = this;
         this.socket = socket;
         this.router = router;
         this.toast = toast;
@@ -969,6 +966,9 @@ var AuthenticationService = /** @class */ (function () {
             }
         }, 1000);
         this.setIntervalID(id);
+        this.socket.sensorTimeout().subscribe(function (sensor) {
+            _this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor timeout');
+        });
     }
     AuthenticationService_1 = AuthenticationService;
     AuthenticationService.prototype.canActivate = function () {
@@ -1100,10 +1100,13 @@ var SocketService = /** @class */ (function () {
     SocketService.prototype.updateTable = function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
-            _this.socket.on('updateTable', function (message) {
-                _this.table = message;
-                observer.next(message);
-            });
+            _this.socket.on('updateTable', function (message) { observer.next(message); });
+        });
+    };
+    SocketService.prototype.sensorTimeout = function () {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+            _this.socket.on('sensorTimeout', function (message) { observer.next(message); });
         });
     };
     SocketService.prototype.closeSocket = function () {

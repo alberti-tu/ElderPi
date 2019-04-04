@@ -28,7 +28,15 @@ const updateClient = async function updateClient() {
     catch (error) { }   // There're not users connected
 };
 
+const sendAdvice = async function sendAdvice(sensor) {
+    try {
+        io.emit('sensorTimeout', sensor);
+    }
+    catch (error) { }   // There're not users connected
+};
+
 module.exports = {
     getSocket: getSocket,
-    updateClient: updateClient
+    updateClient: updateClient,
+    sendAdvice: sendAdvice
 };

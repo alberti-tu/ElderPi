@@ -4,6 +4,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { SocketService } from './socket.service';
 import * as jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
+import {Sensor} from '../models/sensor';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{
@@ -21,6 +22,10 @@ export class AuthenticationService implements CanActivate{
     },1000);
 
     this.setIntervalID(id);
+
+    this.socket.sensorTimeout().subscribe((sensor: Sensor) => {
+      this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor timeout');
+    });
   }
 
   canActivate() {
