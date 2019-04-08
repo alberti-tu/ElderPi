@@ -557,7 +557,7 @@ var HistoryComponent = /** @class */ (function () {
         for (var i = 0; i < device.length; i++) {
             sum = sum + device[i].duration;
         }
-        // Process the data
+        // Process data to search DeviceIDs uniques
         for (var i = 0; i < device.length; i++) {
             for (var j = 0; j < device.length; j++) {
                 var found = false;
@@ -565,14 +565,15 @@ var HistoryComponent = /** @class */ (function () {
                     if (device[i].deviceID === value[k].deviceID)
                         found = true;
                 }
-                if ((device[i].deviceID === device[j].deviceID) && (found == false)) {
+                if ((device[i].deviceID === device[j].deviceID) && (found == false))
                     value.push({ deviceName: device[i].deviceName, deviceID: device[i].deviceID, duration: 0 }); // unique Device ID
-                    // Percentage of precense in each device
-                    for (var l = 0; l < device.length; l++) {
-                        if (value[i].deviceID === device[l].deviceID)
-                            value[i].duration = value[i].duration + Math.round(device[l].duration / sum * 100);
-                    }
-                }
+            }
+        }
+        // Probability for each DeviceID
+        for (var i = 0; i < value.length; i++) {
+            for (var j = 0; j < device.length; j++) {
+                if (value[i].deviceID === device[j].deviceID)
+                    value[i].duration = value[i].duration + Math.round(device[j].duration / sum * 100);
             }
         }
         this.xAxis = value.map(function (item) { return item.deviceName || item.deviceID; });
@@ -847,7 +848,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"sendName(deviceName.value, deviceID.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\" placeholder=\"{{sensor.deviceName || sensor.deviceID}}\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Expiration time</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceExpiration type=\"number\" min=\"1\" class=\"form-control\" placeholder=\"{{sensor.expiration}} ms\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\" (change)=\"printItem(deviceID.value)\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -864,28 +865,41 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
-/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
-/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
+/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+/* harmony import */ var _service_socket_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../service/socket.service */ "./src/app/service/socket.service.ts");
+
 
 
 
 
 
 var SensorComponent = /** @class */ (function () {
-    function SensorComponent(http, socket, router) {
+    function SensorComponent(http, socket, router, toast) {
         var _this = this;
         this.http = http;
         this.socket = socket;
         this.router = router;
+        this.toast = toast;
         this.socket.getTable();
         this.socket.updateTable().subscribe(function (sensors) {
             _this.list = sensors;
+            _this.sensor = _this.list[0];
         });
     }
     SensorComponent.prototype.ngOnInit = function () { };
-    SensorComponent.prototype.sendName = function (deviceName, deviceID) {
+    // Shows the device selected in the form
+    SensorComponent.prototype.printItem = function (deviceID) {
+        for (var i = 0; i < this.list.length; i++) {
+            if (this.list[i].deviceID === deviceID) {
+                this.sensor = this.list[i];
+            }
+        }
+    };
+    // Updates the parameters of the selected device
+    SensorComponent.prototype.updateSensor = function (deviceID, deviceName, deviceExpiration) {
         var _this = this;
-        this.http.setSensorName(deviceName, deviceID).subscribe(function (result) {
+        this.http.updateSensor(deviceID, deviceName || this.sensor.deviceName, deviceExpiration || this.sensor.expiration).subscribe(function (result) {
             _this.router.navigateByUrl('/main');
         });
     };
@@ -895,7 +909,7 @@ var SensorComponent = /** @class */ (function () {
             template: __webpack_require__(/*! ./sensor.component.html */ "./src/app/components/sensor/sensor.component.html"),
             styles: [__webpack_require__(/*! ./sensor.component.css */ "./src/app/components/sensor/sensor.component.css")]
         }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_3__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_4__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"]])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_5__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], SensorComponent);
     return SensorComponent;
 }());
@@ -1046,8 +1060,8 @@ var HttpService = /** @class */ (function () {
     HttpService.prototype.login = function (user) {
         return this.http.post(this.url + '/login', user);
     };
-    HttpService.prototype.setSensorName = function (name, id) {
-        var body = { deviceName: name, deviceID: id };
+    HttpService.prototype.updateSensor = function (id, name, expiration) {
+        var body = { deviceName: name, deviceID: id, expiration: expiration };
         var token = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
         return this.http.put(this.url + '/sensor', body, token);
     };
