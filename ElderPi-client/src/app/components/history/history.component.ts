@@ -48,23 +48,25 @@ export class HistoryComponent implements OnInit {
       sum = sum + device[i].duration;
     }
 
-    // Process the data
-    for(let i = 0; i < device.length; i ++) {
-      for(let j = 0; j < device.length; j ++) {
+    // Process data to search DeviceIDs uniques
+    for(let i = 0; i < device.length; i++) {
+      for(let j = 0; j < device.length; j++) {
         let found = false;
 
-        for(let k = 0; k < value.length; k ++) {
-          if(device[i].deviceID === value[k].deviceID) found = true;
+        for(let k = 0; k < value.length; k++) {
+          if (device[i].deviceID === value[k].deviceID) found = true;
         }
 
-        if((device[i].deviceID === device[j].deviceID) && (found == false)) {
+        if((device[i].deviceID === device[j].deviceID) && (found == false))
           value.push({ deviceName: device[i].deviceName, deviceID: device[i].deviceID, duration: 0 });  // unique Device ID
-          // Percentage of precense in each device
-          for(let l = 0; l < device.length; l ++) {
-            if(value[i].deviceID === device[l].deviceID)
-              value[i].duration = value[i].duration + Math.round(device[l].duration / sum * 100);
-          }
-        }
+      }
+    }
+
+    // Probability for each DeviceID
+    for(let i = 0; i < value.length; i++) {
+      for(let j = 0; j < device.length; j++) {
+        if(value[i].deviceID === device[j].deviceID)
+          value[i].duration = value[i].duration + Math.round(device[j].duration / sum * 100);
       }
     }
 

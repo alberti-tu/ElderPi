@@ -6,8 +6,8 @@ import { AuthenticationService } from './authentication.service';
 @Injectable({ providedIn: 'root' })
 export class HttpService {
 
-  //url = location.origin;
-  url = 'https://localhost';
+  url = location.origin;
+  //url = 'https://localhost';
 
   constructor( private http: HttpClient ) { }
 
@@ -15,8 +15,8 @@ export class HttpService {
     return this.http.post<User>(this.url + '/login', user);
   }
 
-  public setSensorName(name: string, id: string) {
-    let body = { deviceName: name, deviceID: id };
+  public updateSensor(id: string, name: string, expiration: string) {
+    let body = { deviceName: name, deviceID: id, expiration: expiration };
     let token = { headers: new HttpHeaders().set('authorization', AuthenticationService.getToken()) };
     return this.http.put(this.url + '/sensor', body, token)
   }

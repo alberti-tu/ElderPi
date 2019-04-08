@@ -51,7 +51,7 @@ app.use(function(req, res, next) {
 app.post('/login', user.login);
 
 app.post('/sensor', sensor.updateSensor, sensor.insertSensor, sensor.updateHistory);
-app.put('/sensor', auth.getToken, sensor.updateNameDevice);
+app.put('/sensor', auth.getToken, sensor.updateDevice);
 app.get('/sensor/history', auth.getToken, sensor.getHistory);
 
 // Socket events

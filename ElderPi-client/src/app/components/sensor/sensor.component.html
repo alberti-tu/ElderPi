@@ -3,13 +3,22 @@
 <div class="container" style="padding-top: 20px">
   <h1>Sensor Manager</h1>
 
-  <form (ngSubmit)="sendName(deviceName.value, deviceID.value)">
+  <form (ngSubmit)="updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)">
     <div class="row">
       <div class="col-md-2">
         <label>Device Name</label>
       </div>
       <div class="col">
-        <input #deviceName class="form-control">
+        <input #deviceName class="form-control" placeholder="{{sensor.deviceName || sensor.deviceID}}">
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-2">
+        <label>Expiration time</label>
+      </div>
+      <div class="col">
+        <input #deviceExpiration type="number" min="1" class="form-control" placeholder="{{sensor.expiration}} ms">
       </div>
     </div>
     <br>
@@ -19,7 +28,7 @@
       </div>
       <div class="col">
         <label>
-          <select #deviceID class="form-control">
+          <select #deviceID class="form-control" (change)="printItem(deviceID.value)">
             <option *ngFor="let item of list" [value]="item.deviceID">{{item.deviceID}}</option>
           </select>
         </label>

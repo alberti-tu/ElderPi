@@ -3,6 +3,7 @@ export class Sensor {
   public deviceID: string;    // Number of the device (unique)
   public battery: number;     // Level of battery
   public time: string;        // Time in the room (human readable)
+  public expiration: string;  // Time set by the user for expiration
   public duration: number;    // Time in the room (ms)
   public timestamp: string;   // Date of the lecture
 

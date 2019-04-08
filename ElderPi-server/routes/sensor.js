@@ -12,8 +12,8 @@ const getHistory = async function getHistory(req, res) {
 // Inserts a new row in the table sensor
 const insertSensor = async function insertSensor(req, res, next) {
     if(!res.locals.isInserted) {
-        await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,NOW())',
-            [req.body.deviceID, req.body.battery]);
+        await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())',
+            [req.body.deviceID, req.body.battery, 3600000]);
     }
 
     next(); // Go to update History
@@ -59,20 +59,20 @@ const updateHistory = async function updateHistory(req, res) {
         //Start the advice Timeout
         clearTimeout(idTimeOut);
         idTimeOut = setTimeout(function () {
-            notification.sendAdvice(sensor[0]);
-        }, 60000);  // 10min
+           notification.sendAdvice(sensor[0]);
+        }, sensor[0].expiration);
     }
 
     socketIO.updateClient();
 };
 
-// Sets a custom name for the device
-const updateNameDevice = async function updateNameDevice(req, res) {
-    // Updates the deviceName in sensor table
-    await mysql.query('UPDATE sensors SET deviceName = ? WHERE deviceID = ?',
-        [req.body.deviceName, req.body.deviceID]);
+// Sets a custom parameters for the device
+const updateDevice = async function updateDevice(req, res) {
+    // Updates the device in sensor table
+    await mysql.query('UPDATE sensors SET deviceName = ?, expiration = ? WHERE deviceID = ?',
+        [req.body.deviceName, req.body.expiration, req.body.deviceID]);
 
-    // Updates the deviceName in history table
+    // Updates the device in history table
     await mysql.query('UPDATE history SET deviceName = ? WHERE deviceID = ?',
         [req.body.deviceName, req.body.deviceID]);
 
@@ -86,5 +86,5 @@ module.exports = {
     insertSensor: insertSensor,
     updateSensor: updateSensor,
     updateHistory: updateHistory,
-    updateNameDevice: updateNameDevice
+    updateDevice: updateDevice
 };
