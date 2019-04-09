@@ -43,6 +43,12 @@ const updateHistory = async function updateHistory(req, res) {
         // Insert a new row into history table with a custom name (if exists)
         await mysql.query('INSERT INTO history VALUES (?,?,?,NOW())',
             [sensor[0].deviceName || null, req.body.deviceID, 0]);
+
+        //Start the advice Timeout
+        clearTimeout(idTimeOut);
+        idTimeOut = setTimeout(function () {
+           notification.sendAdvice(sensor[0]);
+        }, sensor[0].expiration);
     }
 
     // Inserts if the last ID is different
