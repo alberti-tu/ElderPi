@@ -1,0 +1,21 @@
+<app-navbar></app-navbar>
+
+<div class="container" style="padding-top: 20px">
+  <h1>User Manager</h1>
+  <br>
+
+  <form #myForm="ngForm" (ngSubmit)="newEmail(myForm)">
+    <div style="display: grid">
+      <label for="email">Add email address</label>
+      <input id="email" name="email" required ngModel class="form-control" style="grid-column: 1 / 19">
+      <button type="submit" class="btn btn-success" [disabled]="!myForm.form.valid" style="grid-column: 19 / 20">Save</button>
+    </div>
+  </form>
+  <br>
+  <br>
+  <div *ngFor="let item of email">
+    <br>
+    <label>{{item.email}}</label>
+    <button (click)="deleteEmail(item)" class="btn btn-danger" style="float: right"><i class='fas fa-trash-alt'></i></button>
+  </div>
+</div>

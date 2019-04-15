@@ -14,10 +14,12 @@ export class SensorComponent implements OnInit {
 
   list: Sensor[];
   sensor: Sensor;
+  show: boolean = false;
 
   constructor(private http: HttpService, private socket: SocketService, private router: Router, private toast: ToastrManager) {
     this.socket.getTable();
     this.socket.updateTable().subscribe((sensors: Sensor[]) => {
+      if(sensors.length !== 0) this.show = true;
       this.list = sensors;
       this.sensor = this.list[0];
     });

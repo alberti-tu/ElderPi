@@ -4,25 +4,27 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const path = require('path');
 
+// Configuration
+const config = require('./config');
+
 // Certificates
 const fs = require('fs');
-const options = { key: fs.readFileSync('certificate/server.key'), cert: fs.readFileSync('certificate/server.cert') };
+const options = { key: fs.readFileSync(config.https.options.key), cert: fs.readFileSync(config.https.options.cert) };
 
 // Express inicialization
 const express = require('express');
 const app = express();
 
-// Server inicialization
-const http = require('http').createServer(app).listen(80);
-const https = require('https').createServer(options, app).listen(443);
-const io = require('socket.io').listen(https, { path: '/sensor/io'});
-
-// Configurations
 app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+// Server inicialization
+const http = require('http').createServer(app).listen(config.http.port);
+const https = require('https').createServer(options, app).listen(config.https.port);
+const io = require('socket.io').listen(https, { path: '/sensor/io'});
 
 // Function routes
 const auth = require('./routes/authentication');
@@ -31,15 +33,8 @@ const sensor = require('./routes/sensor');
 const socketIO = require('./routes/socket');
 const network = require('./network/network');
 
-//Log the request
-app.use(function (req, res, next) {
-    let ip_req = req.connection.remoteAddress.split('::ffff:')[1] || 'localhost';
-    console.log(new Date().toLocaleString() + ' || ' + ip_req || 'localhost');
-    next();
-});
-
 // Redirect the traffic HTTP to HTTPS and keep the traffic HTTP of the WSN
-network.interfaces('wlan0');
+network.interfaces(config.wsn.interface);
 app.use(function(req, res, next) {
     let ip_remote = req.connection.remoteAddress.split('::ffff:')[1];  // sensor's IPv4 address
 
@@ -49,6 +44,9 @@ app.use(function(req, res, next) {
 
 // Backend routes
 app.post('/login', user.login);
+app.get('/user/email', auth.getToken, user.getEmail);
+app.post('/user/email', auth.getToken, user.addEmail);
+app.put('/user/email', auth.getToken, user.deleteEmail);
 
 app.post('/sensor', sensor.updateSensor, sensor.insertSensor, sensor.updateHistory);
 app.put('/sensor', auth.getToken, sensor.updateDevice);

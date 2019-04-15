@@ -326,8 +326,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _service_authentication_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./service/authentication.service */ "./src/app/service/authentication.service.ts");
 /* harmony import */ var _components_login_login_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/login/login.component */ "./src/app/components/login/login.component.ts");
 /* harmony import */ var _components_main_main_component__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./components/main/main.component */ "./src/app/components/main/main.component.ts");
-/* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
-/* harmony import */ var _components_history_history_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/history/history.component */ "./src/app/components/history/history.component.ts");
+/* harmony import */ var _components_user_user_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/user/user.component */ "./src/app/components/user/user.component.ts");
+/* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
+/* harmony import */ var _components_history_history_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/history/history.component */ "./src/app/components/history/history.component.ts");
+
 
 
 
@@ -339,8 +341,9 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [
     { path: 'login', component: _components_login_login_component__WEBPACK_IMPORTED_MODULE_4__["LoginComponent"] },
     { path: 'main', component: _components_main_main_component__WEBPACK_IMPORTED_MODULE_5__["MainComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
-    { path: 'sensor', component: _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_6__["SensorComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
-    { path: 'history', component: _components_history_history_component__WEBPACK_IMPORTED_MODULE_7__["HistoryComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
+    { path: 'user', component: _components_user_user_component__WEBPACK_IMPORTED_MODULE_6__["UserComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
+    { path: 'sensor', component: _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_7__["SensorComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
+    { path: 'history', component: _components_history_history_component__WEBPACK_IMPORTED_MODULE_8__["HistoryComponent"], canActivate: [_service_authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"]] },
     { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -438,6 +441,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/sensor/sensor.component */ "./src/app/components/sensor/sensor.component.ts");
 /* harmony import */ var _components_history_history_component__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./components/history/history.component */ "./src/app/components/history/history.component.ts");
 /* harmony import */ var ng2_charts__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ng2-charts */ "./node_modules/ng2-charts/fesm5/ng2-charts.js");
+/* harmony import */ var _components_user_user_component__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./components/user/user.component */ "./src/app/components/user/user.component.ts");
+
 
 
 
@@ -464,7 +469,8 @@ var AppModule = /** @class */ (function () {
                 _components_main_main_component__WEBPACK_IMPORTED_MODULE_9__["MainComponent"],
                 _components_navbar_navbar_component__WEBPACK_IMPORTED_MODULE_11__["NavbarComponent"],
                 _components_sensor_sensor_component__WEBPACK_IMPORTED_MODULE_12__["SensorComponent"],
-                _components_history_history_component__WEBPACK_IMPORTED_MODULE_13__["HistoryComponent"]
+                _components_history_history_component__WEBPACK_IMPORTED_MODULE_13__["HistoryComponent"],
+                _components_user_user_component__WEBPACK_IMPORTED_MODULE_15__["UserComponent"]
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
@@ -773,7 +779,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"/sensor\">Sensor</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" routerLink=\"/history\">History</a>\n      </li>\n    </ul>\n    <button class=\"btn btn-outline-success my-2 my-sm-0\" (click)=\"logout()\">Sign Out</button>\n  </div>\n</nav>\n"
+module.exports = "<nav class=\"navbar navbar-expand-lg navbar-dark bg-dark\">\n  <a class=\"navbar-brand\" routerLink=\"/\">ElderPi</a>\n\n  <!-- Collapse Button -->\n  <button class=\"navbar-toggler\" type=\"button\" (click)=\"toggleNavbar()\">\n    <span class=\"navbar-toggler-icon\"></span>\n  </button>\n\n  <!-- Expand the menu -->\n  <div class=\"collapse navbar-collapse\" [ngClass]=\"{'show': navbarOpen}\">\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\"><a class=\"nav-link\" routerLink=\"/user\">User</a></li>\n      <li class=\"nav-item\"><a class=\"nav-link\" routerLink=\"/sensor\">Sensor</a></li>\n      <li class=\"nav-item\"><a class=\"nav-link\" routerLink=\"/history\">History</a></li>\n    </ul>\n    <button class=\"btn btn-outline-success my-2 my-sm-0\" (click)=\"logout()\">Sign Out</button>\n  </div>\n</nav>\n"
 
 /***/ }),
 
@@ -848,7 +854,7 @@ module.exports = "\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Sensor Manager</h1>\n\n  <form (ngSubmit)=\"updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\" placeholder=\"{{sensor.deviceName || sensor.deviceID}}\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Expiration time</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceExpiration type=\"number\" min=\"1\" class=\"form-control\" placeholder=\"{{sensor.expiration}} ms\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\" (change)=\"printItem(deviceID.value)\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>Sensor Manager</h1>\n\n  <form *ngIf=\"show\" (ngSubmit)=\"updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)\">\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device Name</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceName class=\"form-control\" placeholder=\"{{sensor.deviceName || sensor.deviceID}}\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Expiration time</label>\n      </div>\n      <div class=\"col\">\n        <input #deviceExpiration type=\"number\" min=\"1\" class=\"form-control\" placeholder=\"{{sensor.expiration}} ms\">\n      </div>\n    </div>\n    <br>\n    <div class=\"row\">\n      <div class=\"col-md-2\">\n        <label>Device ID</label>\n      </div>\n      <div class=\"col\">\n        <label>\n          <select #deviceID class=\"form-control\" (change)=\"printItem(deviceID.value)\">\n            <option *ngFor=\"let item of list\" [value]=\"item.deviceID\">{{item.deviceID}}</option>\n          </select>\n        </label>\n      </div>\n    </div>\n    <br>\n    <button type=\"submit\" class=\"btn btn-success\">Save</button>\n  </form>\n</div>\n"
 
 /***/ }),
 
@@ -881,8 +887,11 @@ var SensorComponent = /** @class */ (function () {
         this.socket = socket;
         this.router = router;
         this.toast = toast;
+        this.show = false;
         this.socket.getTable();
         this.socket.updateTable().subscribe(function (sensors) {
+            if (sensors.length !== 0)
+                _this.show = true;
             _this.list = sensors;
             _this.sensor = _this.list[0];
         });
@@ -912,6 +921,95 @@ var SensorComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_4__["HttpService"], _service_socket_service__WEBPACK_IMPORTED_MODULE_5__["SocketService"], _angular_router__WEBPACK_IMPORTED_MODULE_2__["Router"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_3__["ToastrManager"]])
     ], SensorComponent);
     return SensorComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/user/user.component.css":
+/*!****************************************************!*\
+  !*** ./src/app/components/user/user.component.css ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ".leftRow {\n  grid-column: 1 / 11;\n}\n\n.middleRow {\n  grid-column: 11 / 12;\n}\n\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvY29tcG9uZW50cy91c2VyL3VzZXIuY29tcG9uZW50LmNzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLG1CQUFtQjtBQUNyQjs7QUFFQTtFQUNFLG9CQUFvQjtBQUN0QiIsImZpbGUiOiJzcmMvYXBwL2NvbXBvbmVudHMvdXNlci91c2VyLmNvbXBvbmVudC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyIubGVmdFJvdyB7XG4gIGdyaWQtY29sdW1uOiAxIC8gMTE7XG59XG5cbi5taWRkbGVSb3cge1xuICBncmlkLWNvbHVtbjogMTEgLyAxMjtcbn1cbiJdfQ== */"
+
+/***/ }),
+
+/***/ "./src/app/components/user/user.component.html":
+/*!*****************************************************!*\
+  !*** ./src/app/components/user/user.component.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<app-navbar></app-navbar>\n\n<div class=\"container\" style=\"padding-top: 20px\">\n  <h1>User Manager</h1>\n  <br>\n\n  <form #myForm=\"ngForm\" (ngSubmit)=\"newEmail(myForm)\">\n    <div style=\"display: grid\">\n      <label for=\"email\">Add email address</label>\n      <input id=\"email\" name=\"email\" required ngModel class=\"form-control\" style=\"grid-column: 1 / 19\">\n      <button type=\"submit\" class=\"btn btn-success\" [disabled]=\"!myForm.form.valid\" style=\"grid-column: 19 / 20\">Save</button>\n    </div>\n  </form>\n  <br>\n  <br>\n  <div *ngFor=\"let item of email\">\n    <br>\n    <label>{{item.email}}</label>\n    <button (click)=\"deleteEmail(item)\" class=\"btn btn-danger\" style=\"float: right\"><i class='fas fa-trash-alt'></i></button>\n  </div>\n</div>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/user/user.component.ts":
+/*!***************************************************!*\
+  !*** ./src/app/components/user/user.component.ts ***!
+  \***************************************************/
+/*! exports provided: UserComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UserComponent", function() { return UserComponent; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ng6-toastr-notifications */ "./node_modules/ng6-toastr-notifications/fesm5/ng6-toastr-notifications.js");
+/* harmony import */ var _service_http_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../service/http.service */ "./src/app/service/http.service.ts");
+
+
+
+
+var UserComponent = /** @class */ (function () {
+    function UserComponent(http, toast) {
+        this.http = http;
+        this.toast = toast;
+        this.email = null;
+        this.getEmail();
+    }
+    UserComponent.prototype.ngOnInit = function () { };
+    UserComponent.prototype.newEmail = function (myform) {
+        var _this = this;
+        var found = false;
+        for (var i = 0; i < this.email.length; i++) {
+            if (this.email[i].email === myform.form.value.email)
+                found = true;
+        }
+        if (found) {
+            this.toast.errorToastr('This email address is in your list', 'Duplicate email address');
+            return;
+        }
+        this.http.addEmail(myform.form.value.email).subscribe(function (result) {
+            _this.email.push({ email: myform.form.value.email });
+            myform.reset();
+        });
+    };
+    UserComponent.prototype.getEmail = function () {
+        var _this = this;
+        this.http.getEmail().subscribe(function (result) { return _this.email = result; });
+    };
+    UserComponent.prototype.deleteEmail = function (address) {
+        var _this = this;
+        this.http.deleteEmail(address.email).subscribe(function (result) {
+            _this.email = _this.email.filter(function (item) { return item !== address; });
+        });
+    };
+    UserComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
+            selector: 'app-user',
+            template: __webpack_require__(/*! ./user.component.html */ "./src/app/components/user/user.component.html"),
+            styles: [__webpack_require__(/*! ./user.component.css */ "./src/app/components/user/user.component.css")]
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_http_service__WEBPACK_IMPORTED_MODULE_3__["HttpService"], ng6_toastr_notifications__WEBPACK_IMPORTED_MODULE_2__["ToastrManager"]])
+    ], UserComponent);
+    return UserComponent;
 }());
 
 
@@ -1059,6 +1157,20 @@ var HttpService = /** @class */ (function () {
     }
     HttpService.prototype.login = function (user) {
         return this.http.post(this.url + '/login', user);
+    };
+    HttpService.prototype.getEmail = function () {
+        var token = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
+        return this.http.get(this.url + '/user/email', token);
+    };
+    HttpService.prototype.addEmail = function (email) {
+        var body = { email: email };
+        var token = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
+        return this.http.post(this.url + '/user/email', body, token);
+    };
+    HttpService.prototype.deleteEmail = function (email) {
+        var body = { email: email };
+        var token = { headers: new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]().set('authorization', _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken()) };
+        return this.http.put(this.url + '/user/email', body, token);
     };
     HttpService.prototype.updateSensor = function (id, name, expiration) {
         var body = { deviceName: name, deviceID: id, expiration: expiration };

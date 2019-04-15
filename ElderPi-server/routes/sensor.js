@@ -1,6 +1,7 @@
 const mysql = require('../database/mysql');
 const socketIO = require('./socket');
 const notification = require('./notification');
+const config = require('../config');
 
 let idTimeOut = 0;
 
@@ -13,7 +14,7 @@ const getHistory = async function getHistory(req, res) {
 const insertSensor = async function insertSensor(req, res, next) {
     if(!res.locals.isInserted) {
         await mysql.query('INSERT INTO sensors VALUES (NULL,?,?,?,NOW())',
-            [req.body.deviceID, req.body.battery, 3600000]);
+            [req.body.deviceID, req.body.battery, config.sensor.defaultTimeout]);
     }
 
     next(); // Go to update History

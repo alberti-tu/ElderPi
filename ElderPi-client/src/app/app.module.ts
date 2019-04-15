@@ -13,7 +13,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SensorComponent } from './components/sensor/sensor.component';
 import { HistoryComponent } from './components/history/history.component';
 
-import { ChartsModule } from 'ng2-charts'
+import { ChartsModule } from 'ng2-charts';
+import { UserComponent } from './components/user/user.component'
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { ChartsModule } from 'ng2-charts'
     MainComponent,
     NavbarComponent,
     SensorComponent,
-    HistoryComponent
+    HistoryComponent,
+    UserComponent
   ],
   imports: [
     BrowserModule,

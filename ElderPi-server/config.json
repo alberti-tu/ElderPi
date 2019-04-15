@@ -1,0 +1,25 @@
+{
+  "mariaDB": {
+    "database": "ElderPi",
+    "host": "localhost",
+    "user": "root"
+  },
+  "http": {
+    "port": 80
+  },
+  "https": {
+    "port": 443,
+    "options": {
+      "key": "certificate/server.key",
+      "cert": "certificate/server.cert"
+    }
+  },
+  "wsn": {
+    "interface": "wlan0"
+  },
+  "sensor": {
+    "alpha": 0.6,
+    "defaultTimeout": 3600000,
+    "lenght": 1000
+  }
+}

@@ -3,7 +3,7 @@
 <div class="container" style="padding-top: 20px">
   <h1>Sensor Manager</h1>
 
-  <form (ngSubmit)="updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)">
+  <form *ngIf="show" (ngSubmit)="updateSensor(deviceID.value, deviceName.value, deviceExpiration.value)">
     <div class="row">
       <div class="col-md-2">
         <label>Device Name</label>

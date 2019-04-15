@@ -1,0 +1,7 @@
+.leftRow {
+  grid-column: 1 / 11;
+}
+
+.middleRow {
+  grid-column: 11 / 12;
+}
