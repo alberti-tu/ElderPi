@@ -10,6 +10,14 @@ const getHistory = async function getHistory(req, res) {
     return res.send( await mysql.query('SELECT * FROM history ORDER BY timestamp DESC') );
 };
 
+const lowBattery = async function lowBatery(req, res) {
+    res.end();  // Close the connection with the sensor
+
+    await mysql.query('UPDATE sensors SET battery = ? WHERE deviceID = ?', [req.body.battery, req.body.deviceID]);
+    let sensor = await mysql.query('SELECT * FROM sensors WHERE deviceID = ?', [req.body.deviceID]);
+    notification.sendBattery(sensor[0]);
+};
+
 // Inserts a new row in the table sensor
 const insertSensor = async function insertSensor(req, res, next) {
     if(!res.locals.isInserted) {
@@ -90,6 +98,7 @@ const updateDevice = async function updateDevice(req, res) {
 
 module.exports = {
     getHistory: getHistory,
+    lowBattery: lowBattery,
     insertSensor: insertSensor,
     updateSensor: updateSensor,
     updateHistory: updateHistory,

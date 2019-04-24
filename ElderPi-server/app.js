@@ -38,7 +38,7 @@ network.interfaces(config.wsn.interface);
 app.use(function(req, res, next) {
     let ip_remote = req.connection.remoteAddress.split('::ffff:')[1];  // sensor's IPv4 address
 
-    if (req.secure || (network.isFromLan(ip_remote) && req.method === 'POST' && req.url === '/sensor' )) next();
+    if (req.secure || (network.isFromLan(ip_remote) && req.method === 'POST')) next();
     else res.redirect('https://' + req.headers.host + req.url);
 });
 
@@ -50,6 +50,7 @@ app.put('/user/email', auth.getToken, user.deleteEmail);
 
 app.post('/sensor', sensor.updateSensor, sensor.insertSensor, sensor.updateHistory);
 app.put('/sensor', auth.getToken, sensor.updateDevice);
+app.post('/sensor/alert', sensor.lowBattery);
 app.get('/sensor/history', auth.getToken, sensor.getHistory);
 
 // Socket events

@@ -31,6 +31,12 @@ export class SocketService {
     });
   }
 
+  public sensorLowBattery() {
+    return new Observable(observer => {
+      this.socket.on('sensorLowBattery', message => { observer.next(message) });
+    });
+  }
+
   public closeSocket() {
     this.socket.disconnect();
   }

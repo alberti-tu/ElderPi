@@ -35,8 +35,16 @@ const sendAdvice = async function sendAdvice(sensor) {
     catch (error) { }   // There're not users connected
 };
 
+const sendBattery = async function sendBattery(sensor) {
+    try {
+        io.emit('sensorLowBattery', sensor);
+    }
+    catch (error) { }   // There're not users connected
+};
+
 module.exports = {
     getSocket: getSocket,
     updateClient: updateClient,
-    sendAdvice: sendAdvice
+    sendAdvice: sendAdvice,
+    sendBattery: sendBattery
 };

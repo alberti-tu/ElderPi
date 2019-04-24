@@ -26,6 +26,10 @@ export class AuthenticationService implements CanActivate{
     this.socket.sensorTimeout().subscribe((sensor: Sensor) => {
       this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor timeout');
     });
+
+    this.socket.sensorLowBattery().subscribe((sensor: Sensor) => {
+      this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor low battery');
+    });
   }
 
   canActivate() {

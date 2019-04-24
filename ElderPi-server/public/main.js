@@ -1081,6 +1081,9 @@ var AuthenticationService = /** @class */ (function () {
         this.socket.sensorTimeout().subscribe(function (sensor) {
             _this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor timeout');
         });
+        this.socket.sensorLowBattery().subscribe(function (sensor) {
+            _this.toast.errorToastr('Check the sensor ' + (sensor.deviceName || sensor.deviceID), 'Sensor low battery');
+        });
     }
     AuthenticationService_1 = AuthenticationService;
     AuthenticationService.prototype.canActivate = function () {
@@ -1233,6 +1236,12 @@ var SocketService = /** @class */ (function () {
         var _this = this;
         return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
             _this.socket.on('sensorTimeout', function (message) { observer.next(message); });
+        });
+    };
+    SocketService.prototype.sensorLowBattery = function () {
+        var _this = this;
+        return new rxjs__WEBPACK_IMPORTED_MODULE_2__["Observable"](function (observer) {
+            _this.socket.on('sensorLowBattery', function (message) { observer.next(message); });
         });
     };
     SocketService.prototype.closeSocket = function () {
