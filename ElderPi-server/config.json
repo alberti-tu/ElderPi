@@ -18,8 +18,6 @@
     "interface": "wlan0"
   },
   "sensor": {
-    "alpha": 0.6,
-    "defaultTimeout": 3600000,
-    "lenght": 1000
+    "defaultTimeout": 3600000
   }
 }
