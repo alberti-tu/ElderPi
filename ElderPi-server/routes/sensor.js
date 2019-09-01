@@ -7,7 +7,7 @@ let idTimeOut = 0;
 
 // Obtains the complete History of sensor logs
 const getHistory = async function getHistory(req, res) {
-    return res.send( await mysql.query('SELECT * FROM history ORDER BY timestamp DESC') );
+    return res.send( await mysql.query('SELECT * FROM history ORDER BY timestamp DESC LIMIT 50') );
 };
 
 const lowBattery = async function lowBatery(req, res) {
