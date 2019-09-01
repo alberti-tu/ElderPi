@@ -6,8 +6,8 @@ import { AuthenticationService } from './authentication.service';
 @Injectable({ providedIn: 'root' })
 export class HttpService {
 
-  //url = location.origin;
-  url = 'https://localhost';
+  url = location.origin;
+  //url = 'https://localhost';
 
   constructor( private http: HttpClient ) { }
 
