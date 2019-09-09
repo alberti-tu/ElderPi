@@ -8,8 +8,8 @@ export class SocketService {
 
   private socket;
 
-  url = location.origin;
-  //url = 'https://localhost';
+  url: string = location.origin;
+  //url: string = 'https://localhost';
 
   constructor() {
     this.socket = io(this.url, { secure: true,  path: '/sensor/io', query: {authorization: AuthenticationService.getToken()} });

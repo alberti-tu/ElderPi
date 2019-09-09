@@ -1153,7 +1153,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var HttpService = /** @class */ (function () {
-    //url = 'https://localhost';
+    //url: string = 'https://localhost';
     function HttpService(http) {
         this.http = http;
         this.url = location.origin;
@@ -1218,7 +1218,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var SocketService = /** @class */ (function () {
-    //url = 'https://localhost';
+    //url: string = 'https://localhost';
     function SocketService() {
         this.url = location.origin;
         this.socket = socket_io_client__WEBPACK_IMPORTED_MODULE_4__(this.url, { secure: true, path: '/sensor/io', query: { authorization: _authentication_service__WEBPACK_IMPORTED_MODULE_3__["AuthenticationService"].getToken() } });
