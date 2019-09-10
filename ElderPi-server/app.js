@@ -4,12 +4,21 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
+const fs = require('fs');
 
 // Configuration
 const config = require('./config');
 
 // Certificates
-const fs = require('fs');
+try {
+    fs.statSync(config.https.options.key).isFile();
+    fs.statSync(config.https.options.cert).isFile();
+}
+catch {
+    console.log('SSL certificates can not be founded!\nFrom the ElderPi-server root directory, execute: ');
+    console.log('\topenssl req -nodes -new -x509 -keyout ' + config.https.options.key + ' -out ' + config.https.options.cert + ' -days 365');
+    process.exit();
+}
 const options = { key: fs.readFileSync(config.https.options.key), cert: fs.readFileSync(config.https.options.cert) };
 
 // Express inicialization
