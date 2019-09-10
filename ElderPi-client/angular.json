@@ -13,19 +13,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/ElderPi-client",
+            "outputPath": "../ElderPi-server/public",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets"
-            ],
-            "styles": [
-              "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.css"
-            ],
+            "assets": [ "src/favicon.ico", "src/assets" ],
+            "styles": [ "src/styles.css", "node_modules/bootstrap/dist/css/bootstrap.css" ],
             "scripts": []
           },
           "configurations": {

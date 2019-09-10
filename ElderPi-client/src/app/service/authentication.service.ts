@@ -4,7 +4,7 @@ import { ToastrManager } from 'ng6-toastr-notifications';
 import { SocketService } from './socket.service';
 import * as jwt_decode from 'jwt-decode';
 import * as moment from 'moment';
-import {Sensor} from '../models/sensor';
+import { Sensor } from '../models/sensor';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService implements CanActivate{

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from './authentication.service';
+import { environment } from '../../environments/environment';
 import * as io from 'socket.io-client';
 
 @Injectable({ providedIn: 'root' })
@@ -8,11 +9,8 @@ export class SocketService {
 
   private socket;
 
-  url: string = location.origin;
-  //url: string = 'https://localhost';
-
   constructor() {
-    this.socket = io(this.url, { secure: true,  path: '/sensor/io', query: {authorization: AuthenticationService.getToken()} });
+    this.socket = io(environment.url, { secure: true,  path: '/sensor/io', query: {authorization: AuthenticationService.getToken()} });
   }
 
   public getTable() {
