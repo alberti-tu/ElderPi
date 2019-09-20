@@ -26,11 +26,12 @@ echo "Cleaning packages..."
 apt clean -y
 apt autoremove -y
 
-cd ElderPi-client
+cd ElderPi-client || exit
 npm install
 cd ..
 
-cd ElderPi-server
+cd ElderPi-server || exit
+mkdir certificate
 npm install
 cd ..
 
