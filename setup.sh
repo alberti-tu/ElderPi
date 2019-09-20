@@ -34,13 +34,9 @@ cd ElderPi-server
 npm install
 cd ..
 
-cd ElderPi-server/certificate
-openssl req -nodes -new -x509 -keyout server.key -out server.cert -days 365
-cd ../..
+openssl req -nodes -new -x509 -keyout ElderPi-server/certificate/server.key -out ElderPi-server/certificate/server.cert -days 365
 
 echo "Process finished!"
 echo "Now reboot..."
 
 reboot
-
-

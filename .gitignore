@@ -1,6 +1,5 @@
 # Files of IDE
 /.idea
-ElderPi.iml
 
 # ElderPi-server
 /ElderPi-server/certificate/server.cert
