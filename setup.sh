@@ -28,11 +28,12 @@ apt autoremove -y
 
 cd ElderPi-client || exit
 npm install
+npm run-script build
 cd ..
 
 cd ElderPi-server || exit
-mkdir certificate
 npm install
+mkdir certificate
 cd ..
 
 openssl req -nodes -new -x509 -keyout ElderPi-server/certificate/server.key -out ElderPi-server/certificate/server.cert -days 365
