@@ -17,15 +17,6 @@ echo "Installing programs..."
 apt install mariadb-server screen -y
 mysql --user="root" --database="mysql" --execute="update user set plugin='' where User='root'; flush privileges;"
 
-echo "Changing the Network Manager"
-apt install network-manager network-manager-gnome openvpn \openvpn-systemd-resolved network-manager-openvpn \network-manager-openvpn-gnome -y
-apt purge openresolv dhcpcd5 -y
-ln -sf /lib/systemd/resolv.conf /etc/resolv.conf
-
-echo "Cleaning packages..."
-apt clean -y
-apt autoremove -y
-
 cd ElderPi-client || exit
 npm install
 npm run-script build
@@ -37,6 +28,15 @@ mkdir certificate
 cd ..
 
 openssl req -nodes -new -x509 -keyout ElderPi-server/certificate/server.key -out ElderPi-server/certificate/server.cert -days 365
+
+echo "Changing the Network Manager"
+apt install network-manager network-manager-gnome openvpn \openvpn-systemd-resolved network-manager-openvpn \network-manager-openvpn-gnome -y
+apt purge openresolv dhcpcd5 -y
+ln -sf /lib/systemd/resolv.conf /etc/resolv.conf
+
+echo "Cleaning packages..."
+apt clean -y
+apt autoremove -y
 
 echo "Process finished!"
 echo "Now reboot..."
