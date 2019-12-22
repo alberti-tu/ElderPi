@@ -6,12 +6,16 @@ apt update -y
 apt upgrade -y
 
 # Installing NodeJS and NPM...
-curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
 apt install nodejs -y
-
-# Updating NPM and Angular to the latest version...
 npm install -g npm
-npm install -g @angular/cli
+
+# Installing latest verison of NodeJS
+npm cache clean -f
+npm install -g n
+n stable
+
+# Installing latest version of Angular
+npm install -g @angular/cli -n
 
 # Installing programs...
 apt install mariadb-server screen dnsmasq hostapd -y
@@ -41,6 +45,12 @@ systemctl unmask hostapd
 systemctl enable hostapd
 systemctl start hostapd
 
+# Routing and NAT configuration
+cp config/sysctl.conf /etc/sysctl.conf
+iptables -t nat -A  POSTROUTING -o eth0 -j MASQUERADE
+sh -c "iptables-save > /etc/iptables.ipv4.nat"
+cp config/rc.local /etc/rc.local
+
 # Compiling client...
 cd ElderPi-client || exit
 npm install
@@ -59,3 +69,6 @@ openssl req -nodes -new -x509 -keyout ElderPi-server/certificate/server.key -out
 # Cleaning packages...
 apt clean -y
 apt autoremove -y
+
+# Reboot
+reboot
