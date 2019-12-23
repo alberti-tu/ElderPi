@@ -15,7 +15,7 @@ npm install -g n
 n stable
 
 # Installing latest version of Angular
-npm install -g @angular/cli -n
+npm install -g @angular/cli
 
 # Installing programs...
 apt install mariadb-server screen dnsmasq hostapd -y
