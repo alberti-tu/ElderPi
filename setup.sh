@@ -6,7 +6,7 @@ apt update -y
 apt upgrade -y
 
 # Installing NodeJS and NPM...
-apt install nodejs -y
+apt install nodejs npm -y
 npm install -g npm
 
 # Installing latest verison of NodeJS
