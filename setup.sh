@@ -13,6 +13,7 @@ npm install -g npm
 npm cache clean -f
 npm install -g n
 n stable
+npm update
 
 # Installing latest version of Angular
 npm install -g @angular/cli
