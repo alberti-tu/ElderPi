@@ -6,7 +6,8 @@ apt update -y
 apt upgrade -y
 
 # Installing NodeJS and NPM...
-apt install nodejs npm -y
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+apt install nodejs -y
 npm install -g npm
 
 # Installing latest verison of NodeJS
