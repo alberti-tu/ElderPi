@@ -15,6 +15,9 @@ npm install -g n
 n stable
 PATH="$PATH"
 
+# Installing latest version of Angular
+npm install -g @angular/cli@8.3.21
+
 # Installing programs...
 apt install mariadb-server screen -y
 
