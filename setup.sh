@@ -31,7 +31,6 @@ cd ..
 # Compiling client...
 cd ElderPi-client || exit
 npm install
-ng update --all
 ng build --prod
 cd ..
 
