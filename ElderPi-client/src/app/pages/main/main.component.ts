@@ -9,8 +9,8 @@ import { Sensor } from '../../models/sensor';
 })
 export class MainComponent implements OnInit {
 
-  headTable: string[] = ['Location', 'Battery', 'Hour', 'Date'];
-  list: Sensor[];
+  public headTable: string[] = ['Location', 'Battery', 'Hour', 'Date'];
+  public list: Sensor[];
 
   constructor(private socket: SocketService) {
     this.socket.getTable();

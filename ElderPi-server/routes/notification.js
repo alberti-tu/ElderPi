@@ -2,12 +2,14 @@ const nodemailer = require('nodemailer');
 const mysql = require('../database/mysql');
 const socketIO = require('./socket');
 
+const config = require('../config');
+
 let transporter = nodemailer.createTransport(
     {
         service: 'Gmail',
         auth: {
-            user: 'notification.elderpi@gmail.com',
-            pass: 'RaspberryPi3'
+            user: config.email.address,
+            pass: config.email.password
         }
     });
 

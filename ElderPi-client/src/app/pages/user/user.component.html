@@ -13,9 +13,9 @@
   </form>
   <br>
   <br>
-  <div *ngFor="let item of email">
+  <div *ngFor="let item of emailList">
     <br>
     <label>{{item.email}}</label>
-    <button (click)="deleteEmail(item)" class="btn btn-danger" style="float: right"><i class='fas fa-trash-alt'></i></button>
+    <button (click)="deleteEmail(item)" class="btn btn-danger" style="float: right"><i class="fas fa-trash"></i></button>
   </div>
 </div>

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrManager } from 'ng6-toastr-notifications';
+import { ToastrService } from 'ngx-toastr';
 
 import { HttpService } from '../../service/http.service';
-import { User } from '../../models/user';
 import { AuthenticationService } from '../../service/authentication.service';
+
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-login',
@@ -13,24 +14,27 @@ import { AuthenticationService } from '../../service/authentication.service';
 })
 export class LoginComponent implements OnInit {
 
-  user: User;
+  public user: User;
 
-  constructor(private http: HttpService, private router: Router, private toast: ToastrManager) {
+  constructor(private http: HttpService, private router: Router, private toast: ToastrService) {
     this.user = new User();
   }
 
-  ngOnInit() {
-    if(AuthenticationService.validToken())
+  public ngOnInit(): void {
+    if (AuthenticationService.validToken()) {
       this.router.navigateByUrl('/main');
+    }
   }
 
-  login() {
+  public login(): void {
     this.http.login(this.user).subscribe(result => {
-      if(result.token == '') return this.toast.errorToastr('Wrong email and / or password', 'You are not who I am waiting for');
+      if (result.token === '') {
+        return this.toast.error('Wrong email and / or password', 'You are not who I am waiting for');
+      }
 
       AuthenticationService.setToken(result.token); // Save season token
 
-      this.toast.successToastr('Welcome ' + this.user.username, 'Correct Login');
+      this.toast.success('Welcome ' + this.user.username, 'Correct Login');
       this.router.navigateByUrl('/main');
     });
   }

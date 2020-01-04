@@ -1,8 +1,7 @@
 {
-  "mariaDB": {
-    "database": "ElderPi",
-    "host": "localhost",
-    "user": "root"
+  "email": {
+    "address": "notification.elderpi@gmail.com",
+    "password": "RaspberryPi3"
   },
   "http": {
     "port": 80
@@ -14,10 +13,15 @@
       "cert": "certificate/server.cert"
     }
   },
-  "wsn": {
-    "interface": "wlan0"
+  "mariaDB": {
+    "database": "ElderPi",
+    "host": "localhost",
+    "user": "root"
   },
   "sensor": {
     "defaultTimeout": 3600000
+  },
+  "wsn": {
+    "interface": "wlan0"
   }
 }

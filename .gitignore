@@ -2,8 +2,8 @@
 /.idea
 
 # ElderPi-server
-/ElderPi-server/certificate/server.cert
-/ElderPi-server/certificate/server.key
+/ElderPi-server/certificate
+/ElderPi-server/public
 /ElderPi-server/node_modules
 
 # ElderPi-client

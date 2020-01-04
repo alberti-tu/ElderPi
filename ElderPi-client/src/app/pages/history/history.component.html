@@ -17,12 +17,12 @@
 
   <div class="container" style="padding-bottom: 40px" *ngIf="showChart">
     <canvas baseChart
-      [chartType]="'bar'"
-      [datasets]="yAxis"
-      [labels]="xAxis"
-      [legend] = "false"
-      [options]="{responsive: true}"
-      [colors]="[{backgroundColor: 'rgba(52, 58, 64, 0.8)'}]">
+            [chartType]="'bar'"
+            [datasets]="yAxis"
+            [labels]="xAxis"
+            [legend] = "false"
+            [options]="{responsive: true}"
+            [colors]="[{backgroundColor: 'rgba(52, 58, 64, 0.8)'}]">
     </canvas>
   </div>
 </div>

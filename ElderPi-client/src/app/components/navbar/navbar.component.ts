@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { ToastrManager } from 'ng6-toastr-notifications';
+import { ToastrService } from 'ngx-toastr';
+
 import { AuthenticationService } from '../../service/authentication.service';
 import { SocketService } from '../../service/socket.service';
 
@@ -10,18 +11,20 @@ import { SocketService } from '../../service/socket.service';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent implements OnInit {
-  navbarOpen: boolean = false;
 
-  constructor(private socket: SocketService, private router: Router, private auth: AuthenticationService, private toast: ToastrManager) { }
+  public navbarOpen = false;
 
-  ngOnInit() { }
+  constructor(private router: Router, private auth: AuthenticationService, private socket: SocketService, private toast: ToastrService) { }
 
-  toggleNavbar() {
+  public ngOnInit(): void { }
+
+  public toggleNavbar(): void {
     this.navbarOpen = !this.navbarOpen;
   }
 
-  logout() {
-    this.toast.successToastr('You have closed your session succesfuly', 'Session finished');
+  public logout(): void {
+    this.toast.success('You have closed your session succesfuly', 'Session finished');
     this.auth.logout();
   }
+
 }

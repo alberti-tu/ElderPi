@@ -1,5 +1,6 @@
 const mariadb = require('mariadb');
 const config = require('../config');
+
 let connection;
 
 // Connects the Database or creates one if it doesn't exists
